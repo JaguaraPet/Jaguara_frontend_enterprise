@@ -1,0 +1,59 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  imagem:
+    # Só publica imagem depois que o CapRover existir (JAG-31) e as variáveis estiverem no repositório.
+    # Até lá o job fica pulado e não gasta minutos do GitHub Actions.
+    if: ${{ vars.CAPROVER_URL != '' }}
+    name: Imagem Docker da web
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/jaguarapet/jaguara-web
+          tags: |
+            type=sha,prefix=
+            type=semver,pattern={{version}}
+            type=raw,value=homologacao,enable={{is_default_branch}}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  implantar:
+    name: Implantar no CapRover
+    needs: imagem
+    runs-on: ubuntu-latest
+    environment: ${{ startsWith(github.ref, 'refs/tags/') && 'producao' || 'homologacao' }}
+    steps:
+      - name: Implantar web
+        env:
+          CAPROVER_URL: ${{ vars.CAPROVER_URL }}
+          CAPROVER_APP_TOKEN_WEB: ${{ secrets.CAPROVER_APP_TOKEN_WEB }}
+          IMAGEM: ghcr.io/jaguarapet/jaguara-web:${{ needs.imagem.outputs.tag }}
+          APP_WEB: ${{ vars.CAPROVER_APP_WEB }}
+        run: npx --yes caprover deploy --caproverUrl "$CAPROVER_URL" --appToken "$CAPROVER_APP_TOKEN_WEB" --appName "$APP_WEB" --imageName "$IMAGEM"

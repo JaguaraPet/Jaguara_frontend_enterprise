@@ -1,0 +1,29 @@
+name: CI
+
+# Só em pull requests: a main só recebe código por PR (ADR-008), e assim o CI não roda duas vezes.
+on:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    name: Lint, tipos e build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Verificação de tipos
+        run: npm run typecheck
+      - name: Auditoria de dependências
+        run: npm audit --omit=dev --audit-level=high
+      - name: Build
+        run: npm run build
