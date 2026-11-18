@@ -1,0 +1,40 @@
+/*
+ * Tokens do UX-02 como variáveis CSS. Os valores são os de src/tema/tokens.ts
+ * (o teste tokens.test.ts confere que os dois estão iguais).
+ */
+:root {
+  --cor-primaria: #8a4b0f;
+  --cor-primaria-escura: #5e3209;
+  --cor-secundaria: #1f5c4a;
+  --cor-fundo: #ffffff;
+  --cor-superficie: #f7f3ee;
+  --cor-texto: #1e1b18;
+  --cor-texto-secundario: #5c554e;
+  --cor-sucesso: #1e7b3a;
+  --cor-alerta: #8a5a00;
+  --cor-erro: #b3261e;
+  --cor-borda: #d9d1c7;
+  --cor-branco: #ffffff;
+  --cor-desabilitado: #ece6df;
+
+  --cor-suave-sucesso: #e6f2ea;
+  --cor-suave-alerta: #fbf1dd;
+  --cor-suave-erro: #fbe9e7;
+  --cor-suave-info: #e7f0ed;
+
+  --fonte-familia: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fonte-titulo-1: 700 28px / 36px var(--fonte-familia);
+  --fonte-titulo-2: 600 22px / 30px var(--fonte-familia);
+  --fonte-corpo: 400 16px / 24px var(--fonte-familia);
+  --fonte-legenda: 400 14px / 20px var(--fonte-familia);
+
+  --espaco-xs: 4px;
+  --espaco-sm: 8px;
+  --espaco-md: 12px;
+  --espaco-lg: 16px;
+  --espaco-xl: 24px;
+  --espaco-xxl: 32px;
+
+  --raio-padrao: 8px;
+  --alvo-toque-minimo: 44px;
+}
