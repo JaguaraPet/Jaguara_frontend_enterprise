@@ -21,6 +21,19 @@ src/
   api/          cliente da API
 ```
 
+## Design e componentes base
+
+Os tokens do UX-02 ficam em `src/tema/tokens.ts`, arquivo idêntico ao do app do tutor, e viram variáveis CSS em `src/tema/variaveis.css`. O teste `tokens.test.ts` falha se os dois divergirem. A fonte Inter vem do pacote `@fontsource/inter`, sem depender de serviço externo.
+
+| Componente | Estados e acessibilidade |
+|---|---|
+| `Botao` | Variantes primária, secundária, perigo e texto; hover, foco visível, desabilitado e carregando (`aria-busy`); área mínima de 44 px |
+| `Campo` | `label` ligado ao campo, ajuda e erro por `aria-describedby`, `aria-invalid` e erro anunciado |
+| `Cartao` | Seção com título, sobre a cor de superfície |
+| `Alerta` | Sucesso, alerta, erro e informação, com cor, ícone e texto (a cor nunca é o único indicador) |
+
+Em desenvolvimento, http://localhost:5173/componentes mostra o catálogo com todos os estados. Testes com Vitest e React Testing Library: `npm test`.
+
 ## Dependências
 
 - Gerenciador: **npm** (versão 11 ou maior), com o `package-lock.json` versionado. Instale com `npm ci` para reproduzir exatamente as versões do lock.
