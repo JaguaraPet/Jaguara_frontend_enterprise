@@ -2,6 +2,9 @@
 
 Aplicação web da empresa, dos funcionários e do administrador, em React com Vite (ADR-007).
 
+
+Novo no projeto? O [guia do ambiente de desenvolvimento (ENT-05)](https://github.com/JaguaraPet/Jaguara_doc/blob/main/docs/07-entrega/ENT-05-guia-do-ambiente.md) mostra como subir API, web e app juntos, do zero.
+
 ## Rodar
 
 ```bash
@@ -56,6 +59,14 @@ npm run api:gerar      # gera src/api/esquema.ts
 ```
 
 Use o cliente de `src/api/cliente.ts` (openapi-fetch); o endereço vem de `VITE_API_URL`: rotas, parâmetros e respostas são conferidos pelo TypeScript. O CI falha se `src/api/esquema.ts` não estiver igual ao gerado a partir de `api/openapi.yaml`.
+
+## Problemas comuns
+
+| Sintoma | Solução |
+|---|---|
+| "Não foi possível entrar agora" no login | A API não está rodando ou ainda está compilando: confira http://localhost:3000/v1/health |
+| Erro de CORS no navegador | A origem da web precisa estar em `URL_WEB` no `.env` da API |
+| CI falha em "Cliente da API igual ao contrato" | Rode `npm run api:gerar` e versione o `src/api/esquema.ts` |
 
 ## Dependências
 
