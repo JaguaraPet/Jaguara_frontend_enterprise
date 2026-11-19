@@ -34,6 +34,17 @@ Os tokens do UX-02 ficam em `src/tema/tokens.ts`, arquivo idêntico ao do app do
 
 Em desenvolvimento, http://localhost:5173/componentes mostra o catálogo com todos os estados. Testes com Vitest e React Testing Library: `npm test`.
 
+## Cliente da API
+
+Os tipos do cliente são gerados do contrato OpenAPI do Jaguara_doc (JAG-95), sem tipos escritos à mão:
+
+```bash
+npm run api:contrato   # baixa o openapi.yaml da main do Jaguara_doc para api/openapi.yaml
+npm run api:gerar      # gera src/api/esquema.ts
+```
+
+Use o cliente de `src/api/cliente.ts` (openapi-fetch); o endereço vem de `VITE_API_URL`: rotas, parâmetros e respostas são conferidos pelo TypeScript. O CI falha se `src/api/esquema.ts` não estiver igual ao gerado a partir de `api/openapi.yaml`.
+
 ## Dependências
 
 - Gerenciador: **npm** (versão 11 ou maior), com o `package-lock.json` versionado. Instale com `npm ci` para reproduzir exatamente as versões do lock.

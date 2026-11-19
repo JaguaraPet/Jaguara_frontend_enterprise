@@ -14,10 +14,13 @@
     "typecheck": "tsc -b",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "api:gerar": "openapi-typescript api/openapi.yaml -o src/api/esquema.ts",
+    "api:contrato": "node -e \"fetch('https://raw.githubusercontent.com/JaguaraPet/Jaguara_doc/main/docs/03-arquitetura/api/openapi.yaml').then(r=>r.text()).then(t=>require('fs').writeFileSync('api/openapi.yaml',t))\""
   },
   "dependencies": {
     "@fontsource/inter": "5.3.0",
+    "openapi-fetch": "0.17.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
@@ -33,6 +36,12 @@
     "oxlint": "^1.90.0",
     "typescript": "~6.0.3",
     "vite": "^8.3.6",
-    "vitest": "5.1.0"
+    "vitest": "5.1.0",
+    "openapi-typescript": "7.13.0"
+  },
+  "overrides": {
+    "openapi-typescript": {
+      "typescript": "$typescript"
+    }
   }
 }
