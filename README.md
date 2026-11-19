@@ -21,6 +21,14 @@ src/
   api/          cliente da API
 ```
 
+## Login e sessão
+
+- `/entrar`: login da empresa e dos funcionários (UC-02). Mostra uma mensagem clara para senha errada, conta bloqueada por 5 minutos (RN03) e e-mail não confirmado (RN02). Tutores são orientados a usar o app.
+- O access token fica só em memória e o refresh token no `localStorage` (`src/api/sessao.ts`). Ao abrir a página, a sessão é restaurada pelo refresh token; quando a API responde 401, o cliente renova o token e repete a requisição uma vez. Várias requisições ao mesmo tempo esperam a mesma renovação, porque o refresh token muda a cada uso.
+- Rotas protegidas usam `RotaProtegida`, que manda para o login quem não tem o tipo de conta certo.
+
+Para testar localmente, suba a API do Jaguara_backend com os dados do seed e entre com `clinica.patas@exemplo.com` e a senha `Jaguara@2026`.
+
 ## Design e componentes base
 
 Os tokens do UX-02 ficam em `src/tema/tokens.ts`, arquivo idêntico ao do app do tutor, e viram variáveis CSS em `src/tema/variaveis.css`. O teste `tokens.test.ts` falha se os dois divergirem. A fonte Inter vem do pacote `@fontsource/inter`, sem depender de serviço externo.
