@@ -27,7 +27,11 @@ src/
 - O access token fica só em memória e o refresh token no `localStorage` (`src/api/sessao.ts`). Ao abrir a página, a sessão é restaurada pelo refresh token; quando a API responde 401, o cliente renova o token e repete a requisição uma vez. Várias requisições ao mesmo tempo esperam a mesma renovação, porque o refresh token muda a cada uso.
 - Rotas protegidas usam `RotaProtegida`, que manda para o login quem não tem o tipo de conta certo.
 
-Para testar localmente, suba a API do Jaguara_backend com os dados do seed e entre com `clinica.patas@exemplo.com` e a senha `Jaguara@2026`.
+Para testar localmente, suba a API do Jaguara_backend com os dados do seed e entre com `clinica.patas@exemplo.com` (ou, em `/admin/entrar`, `admin@jaguara.exemplo.com`) e a senha `Jaguara@2026`.
+
+## Administração da plataforma
+
+`/admin` é a área do administrador do Jaguara (UX-01, seção 5), com login próprio em `/admin/entrar`. Só contas do tipo administrador entram; as demais voltam para o login. O menu lateral (`src/layout/LayoutComMenu.tsx`) mostra só os itens liberados pelas permissões do perfil e vira um painel com o botão "Menu" em telas estreitas. As telas de cada item chegam nas próximas tarefas (UC-25 a UC-30).
 
 ## Design e componentes base
 

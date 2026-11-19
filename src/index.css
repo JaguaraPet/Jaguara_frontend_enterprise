@@ -135,3 +135,20 @@ a:focus-visible {
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
+}
+
+.pagina__descricao {
+  margin: 0;
+  color: var(--cor-texto-secundario);
+}
+
+.pagina__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espaco-lg);
+}
