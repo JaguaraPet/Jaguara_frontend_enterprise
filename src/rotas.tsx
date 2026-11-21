@@ -4,23 +4,36 @@ import { LayoutComMenu } from './layout/LayoutComMenu';
 import { itensAdmin } from './paginas/admin/itensAdmin';
 import { PainelAdmin } from './paginas/admin/PainelAdmin';
 import { Componentes } from './paginas/Componentes';
+import { itensEmpresa } from './paginas/empresa/itensEmpresa';
 import { EmConstrucao } from './paginas/EmConstrucao';
 import { Entrar } from './paginas/Entrar';
 import { Painel } from './paginas/Painel';
+import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
 import { RotaProtegida } from './sessao/RotaProtegida';
 
 export const rotas: RouteObject[] = [
+  // Páginas públicas
   {
     path: '/entrar',
     element: <Entrar tipos={['EMPRESA', 'FUNCIONARIO']} titulo="Entrar no Jaguara Enterprise" destino="/" />,
   },
+  { path: '/confirmar-email', element: <ConfirmarEmail /> },
+  { path: '/primeiro-acesso', element: <PrimeiroAcesso /> },
+
+  // Web Enterprise (UX-01, seção 4): empresa e funcionários.
   {
     path: '/',
     element: (
       <RotaProtegida tipos={['EMPRESA', 'FUNCIONARIO']} entrar="/entrar">
-        <Painel />
+        <LayoutComMenu area="Enterprise" itens={itensEmpresa} sairPara="/entrar" />
       </RotaProtegida>
     ),
+    children: [
+      { index: true, element: <Painel /> },
+      ...itensEmpresa
+        .filter((item) => item.caminho !== '/')
+        .map((item) => ({ path: item.caminho.slice(1), element: <EmConstrucao titulo={item.rotulo} /> })),
+    ],
   },
 
   // Administração da plataforma (UX-01, seção 5): só administradores.
