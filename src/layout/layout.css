@@ -144,3 +144,30 @@
     padding: var(--espaco-lg);
   }
 }
+
+/* Avisos em tempo real (UC-44): acima do conteúdo, sem cobrir o menu. */
+.avisos-tempo-real {
+  display: grid;
+  gap: var(--espaco-sm);
+  margin-bottom: var(--espaco-lg);
+}
+
+.avisos-tempo-real__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-sm);
+}
+
+.avisos-tempo-real__item .alerta {
+  flex: 1;
+}
+
+.avisos-tempo-real__fechar {
+  min-height: 44px;
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  cursor: pointer;
+}

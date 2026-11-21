@@ -11,6 +11,7 @@ import { Entrar } from './paginas/Entrar';
 import { Painel } from './paginas/Painel';
 import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
 import { RotaProtegida } from './sessao/RotaProtegida';
+import { AvisosPagamento } from './tempo-real/AvisosPagamento';
 
 export const rotas: RouteObject[] = [
   // Páginas públicas
@@ -26,7 +27,12 @@ export const rotas: RouteObject[] = [
     path: '/',
     element: (
       <RotaProtegida tipos={['EMPRESA', 'FUNCIONARIO']} entrar="/entrar">
-        <LayoutComMenu area="Enterprise" itens={itensEmpresa} sairPara="/entrar" />
+        <LayoutComMenu
+          area="Enterprise"
+          itens={itensEmpresa}
+          sairPara="/entrar"
+          extras={<AvisosPagamento />}
+        />
       </RotaProtegida>
     ),
     children: [
