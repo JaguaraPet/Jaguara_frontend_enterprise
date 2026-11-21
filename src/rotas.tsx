@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 import type { RouteObject } from 'react-router';
 import { LayoutComMenu } from './layout/LayoutComMenu';
 import { itensAdmin } from './paginas/admin/itensAdmin';
+import { Logs } from './paginas/admin/Logs';
 import { PainelAdmin } from './paginas/admin/PainelAdmin';
 import { Componentes } from './paginas/Componentes';
 import { itensEmpresa } from './paginas/empresa/itensEmpresa';
@@ -52,8 +53,9 @@ export const rotas: RouteObject[] = [
     ),
     children: [
       { index: true, element: <PainelAdmin /> },
+      { path: 'logs', element: <Logs /> },
       ...itensAdmin
-        .filter((item) => item.caminho !== '/admin')
+        .filter((item) => !['/admin', '/admin/logs'].includes(item.caminho))
         .map((item) => ({
           path: item.caminho.replace('/admin/', ''),
           element: <EmConstrucao titulo={item.rotulo} />,

@@ -1325,6 +1325,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/empresas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Buscar empresas com serviços ativos (UC-33) */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Trecho do nome da empresa ou de um serviço. */
+                    busca?: string;
+                    tipo?: "CLINICA_VETERINARIA" | "PET_SHOP" | "HOTEL_PET" | "CRECHE" | "CASA_DE_CUIDADO";
+                    /** @description Categoria de serviço oferecida. */
+                    categoria?: "CONSULTA" | "EXAME" | "CIRURGIA" | "VACINACAO" | "BANHO_TOSA" | "HOSPEDAGEM" | "PET_SITTER" | "CRECHE" | "OUTRO";
+                    cidade?: string;
+                    pagina?: components["parameters"]["Pagina"];
+                    tamanho?: components["parameters"]["Tamanho"];
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Empresas encontradas. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PaginaEmpresas"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/empresas/{empresaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                empresaId: components["parameters"]["EmpresaId"];
+            };
+            cookie?: never;
+        };
+        /** Ver o perfil público da empresa (UC-33) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Dados públicos da empresa. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["EmpresaPublica"];
+                    };
+                };
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/empresas/{empresaId}/servicos": {
         parameters: {
             query?: never;
@@ -1432,6 +1518,116 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["Servico"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/empresas/{empresaId}/recursos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                empresaId: components["parameters"]["EmpresaId"];
+            };
+            cookie?: never;
+        };
+        /** Listar recursos da empresa (UC-38) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Salas, equipamentos, baias e veículos da empresa. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Recurso"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Cadastrar recurso (UC-38) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RecursoEntrada"];
+                };
+            };
+            responses: {
+                /** @description Recurso criado. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Recurso"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/recursos/{recursoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                recursoId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Alterar ou desativar recurso (UC-38) */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    recursoId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RecursoEntrada"];
+                };
+            };
+            responses: {
+                /** @description Recurso atualizado. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Recurso"];
                     };
                 };
             };
@@ -2198,7 +2394,29 @@ export interface paths {
             };
             cookie?: never;
         };
-        get?: never;
+        /** Listar clientes (UC-21) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Clientes da empresa, com a situação do consentimento (RN41). */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Cliente"][];
+                    };
+                };
+            };
+        };
         put?: never;
         /** Cadastrar cliente (UC-21) */
         post: {
@@ -2241,7 +2459,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Cliente"];
+                    };
                 };
                 422: components["responses"]["Validacao"];
             };
@@ -3014,6 +3234,7 @@ export interface paths {
                 query?: {
                     nivel?: "INFO" | "ALERTA" | "CRITICO";
                     de?: string;
+                    ate?: string;
                 };
                 header?: never;
                 path?: never;
@@ -3381,6 +3602,58 @@ export interface components {
             ativo: boolean;
         };
         Servico: components["schemas"]["ServicoEntrada"] & {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            empresaId?: string;
+        };
+        EmpresaPublica: {
+            /** Format: uuid */
+            id?: string;
+            nomeFantasia?: string;
+            /** @enum {string} */
+            tipo?: "CLINICA_VETERINARIA" | "PET_SHOP" | "HOTEL_PET" | "CRECHE" | "CASA_DE_CUIDADO";
+            bairro?: string;
+            cidade?: string;
+            uf?: string;
+            /** @description Categorias dos serviços ativos. */
+            categorias?: string[];
+        };
+        PaginaEmpresas: {
+            itens?: components["schemas"]["EmpresaPublica"][];
+            total?: number;
+            pagina?: number;
+            tamanho?: number;
+        };
+        Cliente: {
+            /** Format: uuid */
+            id?: string;
+            codigo?: string;
+            nome?: string;
+            /** @description CPF mascarado (ARQ-02). */
+            cpf?: string;
+            telefone?: string;
+            /** Format: email */
+            email?: string;
+            /** @description Ligado a uma conta de tutor (ADR-010). */
+            possuiConta?: boolean;
+            ativo?: boolean;
+            /** @enum {string} */
+            consentimento?: "PENDENTE" | "VIGENTE" | "REVOGADO";
+            /**
+             * Format: uri
+             * @description Link do termo para o cliente aceitar (só enquanto pendente).
+             */
+            linkTermo?: string;
+        };
+        RecursoEntrada: {
+            nome: string;
+            /** @enum {string} */
+            tipo: "SALA" | "EQUIPAMENTO" | "BAIA" | "VEICULO" | "OUTRO";
+            /** @default true */
+            ativo: boolean;
+        };
+        Recurso: components["schemas"]["RecursoEntrada"] & {
             /** Format: uuid */
             id?: string;
             /** Format: uuid */

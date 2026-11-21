@@ -9,7 +9,11 @@ export { URL_API };
  * Cliente tipado gerado do contrato OpenAPI (JAG-95): rotas, parâmetros e respostas
  * vêm de src/api/esquema.ts, sem tipos escritos à mão.
  */
-export const api = createClient<paths>({ baseUrl: URL_API });
+export const api = createClient<paths>({
+  baseUrl: URL_API,
+  // Resolve o fetch a cada chamada (permite trocar o fetch global nos testes).
+  fetch: (requisicao) => globalThis.fetch(requisicao),
+});
 
 const repetidas = new WeakSet<Request>();
 
