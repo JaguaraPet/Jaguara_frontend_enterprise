@@ -1,0 +1,50 @@
+/* Formulários da administração (UX-02): campos em coluna, largura confortável. */
+.admin__formulario {
+  display: grid;
+  gap: var(--espaco-md);
+  max-width: 560px;
+}
+
+.admin__selecao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.admin__selecao select {
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.admin__eventos {
+  display: grid;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.admin__eventos legend {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.admin__eventos label {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  min-height: var(--alvo-toque-minimo);
+}
+
+.admin__acoes {
+  display: flex;
+  gap: var(--espaco-sm);
+}
