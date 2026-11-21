@@ -32,6 +32,12 @@ src/
 
 Para testar localmente, suba a API do Jaguara_backend com os dados do seed e entre com `clinica.patas@exemplo.com` (ou, em `/admin/entrar`, `admin@jaguara.exemplo.com`) e a senha `Jaguara@2026`.
 
+## Layout da web Enterprise
+
+Depois do login, a empresa e os funcionários entram no painel (UX-01, seção 4), com o menu lateral do mesmo `LayoutComMenu` da administração. O menu e os atalhos do painel mostram só o que o perfil permite (RN20): o atendente, por exemplo, não vê Funcionários nem Relatórios. O layout é responsivo de 360 a 1920 px (RNF04); abaixo de 768 px o menu vira um painel aberto pelo botão "Menu". As telas de cada item chegam nas próximas tarefas.
+
+Páginas públicas: `/confirmar-email` (link do e-mail de confirmação, RN02) e `/primeiro-acesso` (o funcionário convidado confirma o e-mail e cria a senha, UC-19).
+
 ## Administração da plataforma
 
 `/admin` é a área do administrador do Jaguara (UX-01, seção 5), com login próprio em `/admin/entrar`. Só contas do tipo administrador entram; as demais voltam para o login. O menu lateral (`src/layout/LayoutComMenu.tsx`) mostra só os itens liberados pelas permissões do perfil e vira um painel com o botão "Menu" em telas estreitas. As telas de cada item chegam nas próximas tarefas (UC-25 a UC-30).
