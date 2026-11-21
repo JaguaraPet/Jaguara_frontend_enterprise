@@ -2416,7 +2416,12 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            agendamentos?: components["schemas"]["Agendamento"][];
+                            agendamentos?: (components["schemas"]["Agendamento"] & {
+                                servicoNome?: string;
+                                petNome?: string;
+                                profissionalNome?: string;
+                                recursoNome?: string;
+                            })[];
                             solicitacoesPendentes?: components["schemas"]["Solicitacao"][];
                         };
                     };

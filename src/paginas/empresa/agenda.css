@@ -1,0 +1,112 @@
+/* Agenda semanal (UC-24): sete colunas em telas largas, uma embaixo da outra no celular. */
+.agenda__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-sm);
+}
+
+.agenda__semana {
+  margin: 0;
+  font-weight: 600;
+  min-width: 12rem;
+  text-align: center;
+}
+
+.agenda__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-md);
+}
+
+.agenda__filtros label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.agenda__filtros select {
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.agenda__dias {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--espaco-sm);
+}
+
+.agenda__dia {
+  min-height: 8rem;
+  padding: var(--espaco-sm);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-superficie);
+}
+
+.agenda__dia h2 {
+  margin: 0 0 var(--espaco-sm);
+  font: var(--fonte-legenda);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.agenda__dia ul {
+  display: grid;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agenda__item {
+  display: grid;
+  gap: 2px;
+  padding: var(--espaco-sm);
+  border-left: 4px solid var(--cor-primaria);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-fundo);
+  font: var(--fonte-legenda);
+}
+
+.agenda__item--cancelado {
+  border-left-color: var(--cor-texto-secundario);
+  opacity: 0.75;
+}
+
+.agenda__item--cancelado strong {
+  text-decoration: line-through;
+}
+
+.agenda__item--realizado {
+  border-left-color: var(--cor-sucesso);
+}
+
+.agenda__hora,
+.agenda__detalhe,
+.agenda__status,
+.agenda__vazio {
+  color: var(--cor-texto-secundario);
+}
+
+.agenda__vazio {
+  margin: 0;
+  font: var(--fonte-legenda);
+}
+
+@media (max-width: 1023px) {
+  .agenda__dias {
+    grid-template-columns: 1fr;
+  }
+
+  .agenda__dia {
+    min-height: auto;
+  }
+}
