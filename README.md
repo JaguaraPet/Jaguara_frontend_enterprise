@@ -38,6 +38,10 @@ Depois do login, a empresa e os funcionários entram no painel (UX-01, seção 4
 
 Páginas públicas: `/confirmar-email` (link do e-mail de confirmação, RN02) e `/primeiro-acesso` (o funcionário convidado confirma o e-mail e cria a senha, UC-19).
 
+## Tempo real
+
+A área Enterprise abre uma conexão Socket.IO com o namespace `/tempo-real` da API (ADR-011), com o access token atual, relido a cada reconexão (`src/tempo-real`). Quando o gateway confirma o pagamento de um serviço (UC-44), a empresa vê o aviso "Pagamento confirmado" no topo da página, até fechar.
+
 ## Administração da plataforma
 
 `/admin` é a área do administrador do Jaguara (UX-01, seção 5), com login próprio em `/admin/entrar`. Só contas do tipo administrador entram; as demais voltam para o login. O menu lateral (`src/layout/LayoutComMenu.tsx`) mostra só os itens liberados pelas permissões do perfil e vira um painel com o botão "Menu" em telas estreitas. Monitoramento e logs (`/admin/logs`, UC-25) mostra a situação da API pelo health check e os registros de auditoria, com filtro por nível e período e o nível escrito, não só a cor. As demais telas chegam nas próximas tarefas (UC-26 a UC-30).

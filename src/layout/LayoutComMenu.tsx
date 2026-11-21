@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { sessao } from '../api/sessao';
 import { useUsuario } from '../sessao/useUsuario';
@@ -15,13 +16,15 @@ interface Props {
   area: string;
   itens: ItemMenu[];
   sairPara: string;
+  /** Conteúdo fixo acima de cada página, como os avisos em tempo real. */
+  extras?: ReactNode;
 }
 
 /**
  * Layout com menu lateral (UX-01, seções 4 e 5). Mostra só os itens liberados pelas permissões
  * do usuário. Em telas estreitas o menu vira um painel aberto pelo botão "Menu".
  */
-export function LayoutComMenu({ area, itens, sairPara }: Props) {
+export function LayoutComMenu({ area, itens, sairPara, extras }: Props) {
   const usuario = useUsuario();
   const navegar = useNavigate();
   const [aberto, setAberto] = useState(false);
@@ -71,6 +74,7 @@ export function LayoutComMenu({ area, itens, sairPara }: Props) {
         </ul>
       </nav>
       <main className="layout__conteudo">
+        {extras}
         <Outlet />
       </main>
     </div>
