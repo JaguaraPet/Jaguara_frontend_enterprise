@@ -7,6 +7,7 @@ import type { ItemMenu } from '../../layout/LayoutComMenu';
 export const itensEmpresa: (ItemMenu & { descricao: string })[] = [
   { rotulo: 'Painel', caminho: '/', descricao: 'Visão geral do dia' },
   { rotulo: 'Agenda', caminho: '/agenda', permissao: 'agenda:ler', descricao: 'Agenda semanal e atendimentos (UC-24, UC-23)' },
+  { rotulo: 'Horários', caminho: '/horarios', permissao: 'agenda:ler', descricao: 'Horários de atuação da equipe e dos recursos (UC-24)' },
   { rotulo: 'Solicitações', caminho: '/solicitacoes', permissao: 'agenda:editar', descricao: 'Pedidos de agendamento dos tutores (UC-41)' },
   { rotulo: 'Catálogo', caminho: '/catalogo', permissao: 'servico:ler', descricao: 'Serviços e recursos (UC-38)' },
   { rotulo: 'Clientes', caminho: '/clientes', permissao: 'cliente:ler', descricao: 'Clientes e termos de consentimento (UC-21)' },
