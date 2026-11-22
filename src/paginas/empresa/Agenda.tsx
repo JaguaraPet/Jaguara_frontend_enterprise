@@ -36,6 +36,7 @@ export function Agenda({ hoje: hojeTeste }: { hoje?: Date }) {
   const usuario = useUsuario();
   const empresaId = usuario?.empresaId ?? '';
   const podeAtender = usuario?.permissoes.includes('atendimento:ler') ?? false;
+  const podeAgendar = usuario?.permissoes.includes('agenda:editar') ?? false;
   const [segunda, setSegunda] = useState(() => inicioDaSemana(hoje));
   const [profissionalId, setProfissionalId] = useState('');
   const [recursoId, setRecursoId] = useState('');
@@ -110,6 +111,12 @@ export function Agenda({ hoje: hojeTeste }: { hoje?: Date }) {
           Hoje
         </Botao>
       </div>
+
+      {podeAgendar && (
+        <p>
+          <Link to="/agenda/novo">+ Novo agendamento</Link>
+        </p>
+      )}
 
       <div className="agenda__filtros">
         {profissionais.length > 0 && (

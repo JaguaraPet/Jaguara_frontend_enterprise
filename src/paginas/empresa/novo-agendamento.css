@@ -1,0 +1,39 @@
+/* Novo agendamento (UC-39): campos em coluna e horários livres como botões de escolha. */
+.novo-agendamento {
+  display: grid;
+  gap: var(--espaco-md);
+  max-width: 560px;
+}
+
+.novo-agendamento__horarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.novo-agendamento__horarios legend {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.novo-agendamento__horarios label {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.novo-agendamento__horario--escolhido {
+  border-color: var(--cor-primaria);
+  background: var(--cor-superficie);
+  font-weight: 600;
+}
