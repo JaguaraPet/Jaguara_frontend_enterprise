@@ -3263,6 +3263,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/empresas/{empresaId}/perfis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                empresaId: components["parameters"]["EmpresaId"];
+            };
+            cookie?: never;
+        };
+        /** Listar perfis de acesso da empresa (UC-16, UC-19) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Perfis que a empresa pode dar aos funcionários, com as permissões de cada um (RN20). */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PerfilDaEmpresa"][];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/funcionarios/{funcionarioId}": {
         parameters: {
             query?: never;
@@ -5708,7 +5749,18 @@ export interface components {
             email?: string;
             cargo?: string;
             perfil?: string;
+            /** Format: uuid */
+            perfilId?: string;
             ativo?: boolean;
+            /** @description Convite ainda não aceito: o funcionário não criou a senha (RN02). */
+            pendente?: boolean;
+        };
+        PerfilDaEmpresa: {
+            /** Format: uuid */
+            id: string;
+            nome: string;
+            descricao?: string;
+            permissoes: string[];
         };
         /** @enum {string} */
         MetodoPagamento: "CARTAO_CREDITO" | "CARTAO_DEBITO" | "PIX" | "BOLETO";
