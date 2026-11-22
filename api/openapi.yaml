@@ -1728,7 +1728,11 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/RelatorioAtendimentos'
                   - $ref: '#/components/schemas/RelatorioFinanceiro'
-                discriminator: { propertyName: tipo }
+                discriminator:
+                  propertyName: tipo
+                  mapping:
+                    atendimentos: '#/components/schemas/RelatorioAtendimentos'
+                    financeiro: '#/components/schemas/RelatorioFinanceiro'
             application/pdf:
               schema: { type: string, contentMediaType: application/pdf }
         '403': { $ref: '#/components/responses/SemPermissao' }
