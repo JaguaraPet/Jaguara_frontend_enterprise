@@ -1,0 +1,60 @@
+/* Horários de atuação (UC-24): um dia por linha, faixas de horário lado a lado. */
+.horarios__dono {
+  max-width: 360px;
+  margin-bottom: var(--espaco-lg);
+}
+
+.horarios__formulario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+}
+
+.horarios__formulario input {
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+}
+
+.horarios__semana {
+  display: grid;
+  gap: var(--espaco-xs);
+  margin: var(--espaco-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.horarios__semana > li {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+  gap: var(--espaco-md);
+  padding: var(--espaco-sm) 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.horarios__semana ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.horarios__semana ul li {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+  padding: 0 var(--espaco-sm);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-superficie);
+  font-variant-numeric: tabular-nums;
+}
+
+.horarios__vazio {
+  color: var(--cor-texto-secundario);
+}
