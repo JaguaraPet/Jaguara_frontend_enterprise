@@ -18,6 +18,7 @@ import { itensEmpresa } from './paginas/empresa/itensEmpresa';
 import { EmConstrucao } from './paginas/EmConstrucao';
 import { Entrar } from './paginas/Entrar';
 import { Painel } from './paginas/Painel';
+import { CadastroEmpresa } from './paginas/publicas/CadastroEmpresa';
 import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
 import { RotaProtegida } from './sessao/RotaProtegida';
 import { AvisosPagamento } from './tempo-real/AvisosPagamento';
@@ -28,6 +29,7 @@ export const rotas: RouteObject[] = [
     path: '/entrar',
     element: <Entrar tipos={['EMPRESA', 'FUNCIONARIO']} titulo="Entrar no Jaguara Enterprise" destino="/" />,
   },
+  { path: '/cadastro', element: <CadastroEmpresa /> },
   { path: '/confirmar-email', element: <ConfirmarEmail /> },
   { path: '/primeiro-acesso', element: <PrimeiroAcesso /> },
 

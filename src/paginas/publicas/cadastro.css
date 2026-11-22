@@ -1,0 +1,52 @@
+/* Cadastro da empresa (UC-32): o cartão do login, mais largo, com grupos de campos. */
+.cadastro__cartao {
+  max-width: 560px;
+}
+
+.cadastro__grupo {
+  display: grid;
+  gap: var(--espaco-md);
+  margin: 0;
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.cadastro__grupo legend {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.cadastro__linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-md);
+}
+
+.cadastro__termos details {
+  padding: var(--espaco-xs) 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cadastro__termos p {
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-line;
+  font: var(--fonte-legenda);
+}
+
+.cadastro__aceite {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-sm);
+}
+
+.cadastro__aceite input {
+  margin-top: 4px;
+}
+
+@media (max-width: 480px) {
+  .cadastro__linha {
+    grid-template-columns: 1fr;
+  }
+}
