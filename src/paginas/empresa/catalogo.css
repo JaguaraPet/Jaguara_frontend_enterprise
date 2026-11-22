@@ -1,0 +1,44 @@
+/* Catálogo (UC-38): formulário do serviço em colunas e recursos em lista. */
+.catalogo__formulario {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-md);
+  align-items: end;
+}
+
+.catalogo__descricao {
+  grid-column: 1 / -1;
+}
+
+.catalogo__descricao textarea {
+  padding: var(--espaco-sm) var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+  resize: vertical;
+}
+
+.catalogo__recurso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+}
+
+.catalogo__recursos {
+  display: grid;
+  gap: var(--espaco-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.catalogo__recursos li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaco-md);
+  padding: var(--espaco-xs) var(--espaco-sm);
+  border-bottom: 1px solid var(--cor-borda);
+}
