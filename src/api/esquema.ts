@@ -705,7 +705,33 @@ export interface paths {
                 };
             };
         };
-        delete?: never;
+        /**
+         * Desarquivar pet
+         * @description Só o responsável principal. O pet arquivado volta para a lista de ativos; pet falecido não volta.
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Pet de volta à lista de ativos. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                409: components["responses"]["Conflito"];
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
