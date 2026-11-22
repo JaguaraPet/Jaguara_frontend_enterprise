@@ -9,6 +9,7 @@ import { PainelAdmin } from './paginas/admin/PainelAdmin';
 import { Webhooks } from './paginas/admin/Webhooks';
 import { Componentes } from './paginas/Componentes';
 import { Agenda } from './paginas/empresa/Agenda';
+import { RegistrarAtendimento } from './paginas/empresa/Atendimento';
 import { Horarios } from './paginas/empresa/Horarios';
 import { Indicadores } from './paginas/empresa/Indicadores';
 import { Relatorios } from './paginas/empresa/Relatorios';
@@ -45,6 +46,7 @@ export const rotas: RouteObject[] = [
     children: [
       { index: true, element: <Painel /> },
       { path: 'agenda', element: <Agenda /> },
+      { path: 'agenda/:agendamentoId/atendimento', element: <RegistrarAtendimento /> },
       { path: 'horarios', element: <Horarios /> },
       { path: 'indicadores', element: <Indicadores /> },
       { path: 'relatorios', element: <Relatorios /> },
