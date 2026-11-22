@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import type { RouteObject } from 'react-router';
 import { LayoutComMenu } from './layout/LayoutComMenu';
+import { Contas } from './paginas/admin/Contas';
 import { Integracoes } from './paginas/admin/Integracoes';
 import { itensAdmin } from './paginas/admin/itensAdmin';
 import { Logs } from './paginas/admin/Logs';
@@ -66,9 +67,10 @@ export const rotas: RouteObject[] = [
       { path: 'logs', element: <Logs /> },
       { path: 'integracoes', element: <Integracoes /> },
       { path: 'webhooks', element: <Webhooks /> },
+      { path: 'usuarios', element: <Contas /> },
       ...itensAdmin
         .filter(
-          (item) => !['/admin', '/admin/logs', '/admin/integracoes', '/admin/webhooks'].includes(item.caminho),
+          (item) => !['/admin', '/admin/logs', '/admin/integracoes', '/admin/webhooks', '/admin/usuarios'].includes(item.caminho),
         )
         .map((item) => ({
           path: item.caminho.replace('/admin/', ''),

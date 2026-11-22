@@ -48,3 +48,37 @@
   display: flex;
   gap: var(--espaco-sm);
 }
+
+/* Gestão de contas (UC-28): filtros em linha, detalhes em pares rótulo e valor. */
+.admin__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-lg);
+}
+
+.admin__detalhes {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--espaco-xs) var(--espaco-md);
+  margin: 0 0 var(--espaco-lg);
+}
+
+.admin__detalhes dt {
+  font-weight: 600;
+}
+
+.admin__detalhes dd {
+  margin: 0;
+}
+
+.admin__subtitulo {
+  margin: var(--espaco-lg) 0 var(--espaco-sm);
+  font: var(--fonte-titulo-2);
+}
+
+.admin__historico {
+  margin: 0;
+  padding-left: var(--espaco-lg);
+}
