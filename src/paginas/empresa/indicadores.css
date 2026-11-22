@@ -102,3 +102,26 @@
   border-radius: 2px 2px 0 0;
   background: var(--cor-primaria);
 }
+
+/* Relatórios (UC-18): tabelas simples dentro dos cartões. */
+.relatorios__acoes {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--espaco-md);
+}
+
+.relatorios__tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.relatorios__tabela th,
+.relatorios__tabela td {
+  padding: var(--espaco-xs) var(--espaco-sm);
+  border-bottom: 1px solid var(--cor-borda);
+  text-align: left;
+}
+
+.relatorios__tabela td:not(:first-child) {
+  font-variant-numeric: tabular-nums;
+}

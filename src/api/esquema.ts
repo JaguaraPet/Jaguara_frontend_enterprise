@@ -5208,7 +5208,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            tipo: "RelatorioAtendimentos";
+            tipo: "atendimentos";
             /** Format: date */
             de: string;
             /** Format: date */
@@ -5234,7 +5234,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            tipo: "RelatorioFinanceiro";
+            tipo: "financeiro";
             /** Format: date */
             de: string;
             /** Format: date */
