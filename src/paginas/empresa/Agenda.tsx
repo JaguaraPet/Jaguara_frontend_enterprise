@@ -6,6 +6,7 @@ import { Alerta, Botao } from '../../componentes';
 import { useUsuario } from '../../sessao/useUsuario';
 import { diaDoInstante, diasDaSemana, hora, inicioDaSemana, rotuloDia, rotuloSemana, somarDias } from './semana';
 import './agenda.css';
+import './atendimento.css';
 
 type Agendamento = components['schemas']['Agendamento'] & {
   servicoNome?: string;
@@ -34,6 +35,7 @@ export function Agenda({ hoje: hojeTeste }: { hoje?: Date }) {
   const [hoje] = useState(() => hojeTeste ?? new Date());
   const usuario = useUsuario();
   const empresaId = usuario?.empresaId ?? '';
+  const podeAtender = usuario?.permissoes.includes('atendimento:ler') ?? false;
   const [segunda, setSegunda] = useState(() => inicioDaSemana(hoje));
   const [profissionalId, setProfissionalId] = useState('');
   const [recursoId, setRecursoId] = useState('');
@@ -179,6 +181,20 @@ export function Agenda({ hoje: hojeTeste }: { hoje?: Date }) {
                             </span>
                           )}
                           <span className="agenda__status">{STATUS[a.status ?? ''] ?? a.status}</span>
+                          {podeAtender && (a.status === 'AGENDADO' || a.status === 'REALIZADO') && (
+                            <Link
+                              className="agenda__acao"
+                              to={`/agenda/${a.id}/atendimento`}
+                              state={{
+                                servicoId: a.servicoId,
+                                servicoNome: a.servicoNome,
+                                petNome: a.petNome,
+                                dataHoraInicio: a.dataHoraInicio,
+                              }}
+                            >
+                              {a.status === 'REALIZADO' ? 'Ver atendimento' : 'Registrar atendimento'}
+                            </Link>
+                          )}
                         </li>
                       ))}
                     </ul>

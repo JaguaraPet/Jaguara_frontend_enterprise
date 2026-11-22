@@ -1,0 +1,55 @@
+/* Registrar atendimento (UC-23): formulário em coluna e itens cobrados em linhas. */
+.atendimento__contexto {
+  margin-top: 0;
+  color: var(--cor-texto-secundario);
+}
+
+.atendimento__formulario {
+  display: grid;
+  gap: var(--espaco-md);
+  max-width: 720px;
+}
+
+.atendimento__formulario textarea {
+  padding: var(--espaco-sm) var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+  resize: vertical;
+}
+
+.atendimento__itens {
+  display: grid;
+  gap: var(--espaco-md);
+  margin: 0;
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.atendimento__itens legend {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.atendimento__item,
+.atendimento__extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+}
+
+.atendimento__item strong {
+  min-width: 160px;
+  align-self: center;
+}
+
+.atendimento__total {
+  margin: var(--espaco-md) 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.agenda__acao {
+  font: var(--fonte-legenda);
+}
