@@ -3589,6 +3589,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/empresas/{empresaId}/relatorios/{tipo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                empresaId: components["parameters"]["EmpresaId"];
+                /** @description `atendimentos` (operacional) ou `financeiro` (gerencial, exige também financeiro:ler). */
+                tipo: "atendimentos" | "financeiro";
+            };
+            cookie?: never;
+        };
+        /** Emitir relatórios (UC-18, RN22) */
+        get: {
+            parameters: {
+                query: {
+                    de: string;
+                    ate: string;
+                };
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                    /** @description `atendimentos` (operacional) ou `financeiro` (gerencial, exige também financeiro:ler). */
+                    tipo: "atendimentos" | "financeiro";
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Relatório da própria empresa em JSON, ou PDF com `Accept: application/pdf`. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RelatorioAtendimentos"] | components["schemas"]["RelatorioFinanceiro"];
+                        "application/pdf": string;
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                422: components["responses"]["Validacao"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/empresas/{empresaId}/indicadores": {
         parameters: {
             query?: never;
@@ -3613,24 +3664,35 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Indicadores da própria empresa. */
+                /** @description Indicadores só da própria empresa, em período de até um ano: atendimentos realizados, faturamento confirmado, taxa de aceite das solicitações respondidas (%), os cinco serviços mais pedidos e os atendimentos por dia. */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
                         "application/json": {
-                            atendimentos?: number;
-                            faturamento?: number;
-                            taxaAceite?: number;
-                            servicosMaisSolicitados?: {
-                                servico?: string;
-                                quantidade?: number;
+                            /** Format: date */
+                            de: string;
+                            /** Format: date */
+                            ate: string;
+                            atendimentos: number;
+                            faturamento: number;
+                            taxaAceite: number;
+                            solicitacoes: number;
+                            servicosMaisSolicitados: {
+                                servico: string;
+                                quantidade: number;
+                            }[];
+                            atendimentosPorDia: {
+                                /** Format: date */
+                                data: string;
+                                quantidade: number;
                             }[];
                         };
                     };
                 };
                 403: components["responses"]["SemPermissao"];
+                422: components["responses"]["Validacao"];
             };
         };
         put?: never;
@@ -5135,6 +5197,57 @@ export interface components {
             cor?: string;
             microchip?: string;
             castrado: boolean;
+        };
+        ContagemRelatorio: {
+            chave: string;
+            quantidade: number;
+            total?: number;
+        };
+        RelatorioAtendimentos: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            tipo: "RelatorioAtendimentos";
+            /** Format: date */
+            de: string;
+            /** Format: date */
+            ate: string;
+            total: number;
+            /** @description Percentual de realizados entre realizados e faltas. */
+            taxaComparecimento: number;
+            porStatus: components["schemas"]["ContagemRelatorio"][];
+            porServico: components["schemas"]["ContagemRelatorio"][];
+            porProfissional: components["schemas"]["ContagemRelatorio"][];
+            agendamentos: {
+                /** Format: date-time */
+                dataHora?: string;
+                pet?: string;
+                servico?: string;
+                profissional?: string;
+                status?: string;
+                atendimentoFinalizado?: boolean;
+            }[];
+        };
+        RelatorioFinanceiro: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            tipo: "RelatorioFinanceiro";
+            /** Format: date */
+            de: string;
+            /** Format: date */
+            ate: string;
+            faturamento: number;
+            pagamentosConfirmados: number;
+            ticketMedio: number;
+            pendentes: {
+                quantidade?: number;
+                total?: number;
+            };
+            porServico: components["schemas"]["ContagemRelatorio"][];
+            porMetodo: components["schemas"]["ContagemRelatorio"][];
         };
         /** @enum {string} */
         StatusConta: "PENDENTE_CONFIRMACAO" | "ATIVA" | "BLOQUEADA" | "SUSPENSA" | "INATIVA";

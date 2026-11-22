@@ -9,6 +9,7 @@ import { PainelAdmin } from './paginas/admin/PainelAdmin';
 import { Webhooks } from './paginas/admin/Webhooks';
 import { Componentes } from './paginas/Componentes';
 import { Agenda } from './paginas/empresa/Agenda';
+import { Indicadores } from './paginas/empresa/Indicadores';
 import { itensEmpresa } from './paginas/empresa/itensEmpresa';
 import { EmConstrucao } from './paginas/EmConstrucao';
 import { Entrar } from './paginas/Entrar';
@@ -42,8 +43,9 @@ export const rotas: RouteObject[] = [
     children: [
       { index: true, element: <Painel /> },
       { path: 'agenda', element: <Agenda /> },
+      { path: 'indicadores', element: <Indicadores /> },
       ...itensEmpresa
-        .filter((item) => !['/', '/agenda'].includes(item.caminho))
+        .filter((item) => !['/', '/agenda', '/indicadores'].includes(item.caminho))
         .map((item) => ({ path: item.caminho.slice(1), element: <EmConstrucao titulo={item.rotulo} /> })),
     ],
   },
