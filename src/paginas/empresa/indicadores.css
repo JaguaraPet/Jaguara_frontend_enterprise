@@ -1,0 +1,104 @@
+/* Indicadores de BI (UC-17): números em destaque e barras simples, numa cor só. */
+.indicadores__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+}
+
+.indicadores__escolha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm) var(--espaco-lg);
+  margin: 0 0 var(--espaco-lg);
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.indicadores__escolha legend {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.indicadores__escolha label {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+  min-height: var(--alvo-toque-minimo);
+}
+
+.indicadores__numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-lg);
+}
+
+.indicadores__numero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  padding: var(--espaco-md);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-superficie);
+}
+
+.indicadores__numero span,
+.indicadores__numero small {
+  color: var(--cor-texto-secundario);
+}
+
+.indicadores__numero strong {
+  font: var(--fonte-titulo-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.indicadores__barras {
+  display: grid;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.indicadores__barras li {
+  display: grid;
+  grid-template-columns: minmax(80px, 160px) 1fr max-content;
+  align-items: center;
+  gap: var(--espaco-sm);
+}
+
+.indicadores__trilho {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--cor-desabilitado);
+}
+
+.indicadores__trilho span {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--cor-primaria);
+}
+
+.indicadores__valor {
+  font-variant-numeric: tabular-nums;
+}
+
+.indicadores__colunas {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 140px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.indicadores__colunas span {
+  flex: 1;
+  min-height: 1px;
+  border-radius: 2px 2px 0 0;
+  background: var(--cor-primaria);
+}
