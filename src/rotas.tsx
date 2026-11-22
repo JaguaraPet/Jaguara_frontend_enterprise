@@ -14,6 +14,7 @@ import { Catalogo } from './paginas/empresa/Catalogo';
 import { Funcionarios } from './paginas/empresa/Funcionarios';
 import { Horarios } from './paginas/empresa/Horarios';
 import { Indicadores } from './paginas/empresa/Indicadores';
+import { NovoAgendamento } from './paginas/empresa/NovoAgendamento';
 import { Relatorios } from './paginas/empresa/Relatorios';
 import { itensEmpresa } from './paginas/empresa/itensEmpresa';
 import { EmConstrucao } from './paginas/EmConstrucao';
@@ -50,6 +51,7 @@ export const rotas: RouteObject[] = [
     children: [
       { index: true, element: <Painel /> },
       { path: 'agenda', element: <Agenda /> },
+      { path: 'agenda/novo', element: <NovoAgendamento /> },
       { path: 'agenda/:agendamentoId/atendimento', element: <RegistrarAtendimento /> },
       { path: 'horarios', element: <Horarios /> },
       { path: 'catalogo', element: <Catalogo /> },
