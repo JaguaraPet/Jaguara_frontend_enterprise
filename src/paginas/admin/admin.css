@@ -82,3 +82,19 @@
   margin: 0;
   padding-left: var(--espaco-lg);
 }
+
+/* Permissões globais (UC-29): seletor do perfil e a matriz em grupos por módulo. */
+.admin__perfil {
+  max-width: 480px;
+  margin-bottom: var(--espaco-md);
+}
+
+.admin__matriz {
+  display: grid;
+  gap: var(--espaco-md);
+}
+
+.admin__matriz code {
+  color: var(--cor-texto-secundario);
+  font-size: 0.85em;
+}
