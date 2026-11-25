@@ -16,6 +16,7 @@ import { Funcionarios } from './paginas/empresa/Funcionarios';
 import { Horarios } from './paginas/empresa/Horarios';
 import { Indicadores } from './paginas/empresa/Indicadores';
 import { NovoAgendamento } from './paginas/empresa/NovoAgendamento';
+import { Pagamentos } from './paginas/empresa/Pagamentos';
 import { PerfilPet } from './paginas/empresa/PerfilPet';
 import { PetsVinculados } from './paginas/empresa/PetsVinculados';
 import { Relatorios } from './paginas/empresa/Relatorios';
@@ -64,8 +65,9 @@ export const rotas: RouteObject[] = [
       { path: 'pets/:petId', element: <PerfilPet /> },
       { path: 'indicadores', element: <Indicadores /> },
       { path: 'relatorios', element: <Relatorios /> },
+      { path: 'pagamentos', element: <Pagamentos /> },
       ...itensEmpresa
-        .filter((item) => !['/', '/agenda', '/horarios', '/catalogo', '/funcionarios', '/clientes', '/pets', '/indicadores', '/relatorios'].includes(item.caminho))
+        .filter((item) => !['/', '/agenda', '/horarios', '/catalogo', '/funcionarios', '/clientes', '/pets', '/indicadores', '/relatorios', '/pagamentos'].includes(item.caminho))
         .map((item) => ({ path: item.caminho.slice(1), element: <EmConstrucao titulo={item.rotulo} /> })),
     ],
   },
