@@ -5514,6 +5514,156 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/permissoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catálogo de permissões da plataforma (UC-29) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Permissões com o módulo e a categoria de perfil a que pertencem (vazia quando servem a mais de uma). */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            codigo: string;
+                            modulo: string;
+                            descricao: string;
+                            /** @enum {string} */
+                            categoria?: "TUTOR" | "EMPRESA" | "ADMINISTRADOR";
+                        }[];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/perfis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Matriz de acesso dos perfis globais (UC-29) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Perfis globais (Tutor, Empresa e os da administração) com as permissões e quantas contas usam cada um. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PerfilGlobal"][];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/perfis/{perfilId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                perfilId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Alterar as permissões de um perfil global (UC-29, RN35)
+         * @description Vale na próxima requisição de quem usa o perfil: tokens emitidos antes recebem 401 e o
+         *     cliente renova a sessão, que já sai com as permissões novas. Auditado como CRITICO.
+         */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    perfilId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        permissoes: string[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Perfil alterado. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PerfilGlobal"];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                /** @description O administrador tiraria admin:usuarios do próprio perfil (RN35_AUTOBLOQUEIO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+                /** @description Perfil sem permissão (CT-29-02) ou com permissão de outra categoria. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/logs": {
         parameters: {
             query?: never;
@@ -6601,6 +6751,16 @@ export interface components {
             ativo?: boolean;
             /** @description Convite ainda não aceito: o funcionário não criou a senha (RN02). */
             pendente?: boolean;
+        };
+        PerfilGlobal: {
+            /** Format: uuid */
+            id: string;
+            nome: string;
+            descricao?: string;
+            /** @enum {string} */
+            categoria: "TUTOR" | "EMPRESA" | "ADMINISTRADOR";
+            permissoes: string[];
+            usuarios: number;
         };
         PerfilEntrada: {
             nome: string;

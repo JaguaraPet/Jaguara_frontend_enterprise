@@ -6,6 +6,7 @@ import { Integracoes } from './paginas/admin/Integracoes';
 import { itensAdmin } from './paginas/admin/itensAdmin';
 import { Logs } from './paginas/admin/Logs';
 import { PainelAdmin } from './paginas/admin/PainelAdmin';
+import { PermissoesGlobais } from './paginas/admin/PermissoesGlobais';
 import { Webhooks } from './paginas/admin/Webhooks';
 import { Componentes } from './paginas/Componentes';
 import { Agenda } from './paginas/empresa/Agenda';
@@ -92,9 +93,10 @@ export const rotas: RouteObject[] = [
       { path: 'integracoes', element: <Integracoes /> },
       { path: 'webhooks', element: <Webhooks /> },
       { path: 'usuarios', element: <Contas /> },
+      { path: 'permissoes', element: <PermissoesGlobais /> },
       ...itensAdmin
         .filter(
-          (item) => !['/admin', '/admin/logs', '/admin/integracoes', '/admin/webhooks', '/admin/usuarios'].includes(item.caminho),
+          (item) => !['/admin', '/admin/logs', '/admin/integracoes', '/admin/webhooks', '/admin/usuarios', '/admin/permissoes'].includes(item.caminho),
         )
         .map((item) => ({
           path: item.caminho.replace('/admin/', ''),
