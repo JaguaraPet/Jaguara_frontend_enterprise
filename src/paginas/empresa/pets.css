@@ -1,0 +1,94 @@
+/* Pets vinculados e perfil do pet (UC-20, UC-22, UC-35 a UC-37). */
+.pets__ajuda {
+  max-width: 720px;
+  color: var(--cor-texto-secundario);
+}
+
+.pets__busca {
+  max-width: 360px;
+  margin-bottom: var(--espaco-lg);
+}
+
+.pets__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--espaco-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pets__cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  height: 100%;
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.pets__cartao:hover,
+.pets__cartao:focus-visible {
+  border-color: var(--cor-primaria);
+}
+
+.pets__etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xs);
+}
+
+.pets__etiqueta {
+  padding: 2px var(--espaco-sm);
+  border-radius: 999px;
+  background: var(--cor-suave-info);
+  font: var(--fonte-legenda);
+}
+
+.pets__secoes {
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.perfil__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--espaco-md);
+}
+
+.perfil__destaque {
+  padding: var(--espaco-md);
+  border-left: 4px solid var(--cor-erro);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-suave-erro);
+}
+
+.perfil__lista {
+  margin: 0;
+  padding-left: var(--espaco-lg);
+}
+
+.perfil__linha {
+  display: grid;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.perfil__linha li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: var(--espaco-md);
+  padding-bottom: var(--espaco-sm);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.perfil__linha time {
+  color: var(--cor-texto-secundario);
+  font-variant-numeric: tabular-nums;
+}
