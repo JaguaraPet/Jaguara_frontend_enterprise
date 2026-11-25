@@ -1554,11 +1554,39 @@ export interface paths {
             };
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Listar documentos do pet (UC-34)
+         * @description Tutor responsável ou empresa com o escopo DOCUMENTOS (RN15). A lista não traz endereço de arquivo.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Documentos, do envio mais recente para o mais antigo. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Documento"][];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
         put?: never;
         /**
          * Iniciar envio de documento (UC-34)
-         * @description Retorna uma URL assinada de envio válida por 5 minutos.
+         * @description Registra o documento e devolve a URL assinada para o aparelho enviar o arquivo com PUT,
+         *     válida por 5 minutos (ADR-005). Aceita PDF, JPG, PNG, WEBP e HEIC até 10 MB.
          */
         post: {
             parameters: {
@@ -1576,6 +1604,10 @@ export interface paths {
                         tipo: components["schemas"]["TipoDocumento"];
                         nomeArquivo: string;
                         tamanhoBytes: number;
+                        /** Format: date */
+                        dataEmissao?: string;
+                        /** Format: date */
+                        dataValidade?: string;
                     };
                 };
             };
@@ -1588,15 +1620,119 @@ export interface paths {
                     content: {
                         "application/json": {
                             /** Format: uuid */
-                            documentoId?: string;
+                            documentoId: string;
                             /** Format: uri */
-                            urlEnvio?: string;
+                            urlEnvio: string;
+                            /** Format: date-time */
+                            expiraEm: string;
                         };
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                422: components["responses"]["Validacao"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documentos/{documentoId}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentoId: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * Baixar documento do pet (UC-34)
+         * @description URL assinada de download, válida por 5 minutos, que baixa com o nome original (CT-34-02).
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    documentoId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description URL de download. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uri */
+                            url: string;
+                            /** Format: date-time */
+                            expiraEm: string;
+                        };
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documentos/{documentoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                documentoId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Excluir documento do pet (UC-34) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    documentoId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Documento excluído e auditado. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                /** @description O documento é o laudo de um exame (DOCUMENTO_EM_USO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
                     };
                 };
             };
         };
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1677,6 +1813,221 @@ export interface paths {
                     };
                 };
                 422: components["responses"]["Validacao"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendario-externo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Situação do calendário externo do tutor (UC-09) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Conta conectada, se autorizada e a última sincronização; vazio quando não há conexão. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {string} */
+                            provedor?: "GOOGLE";
+                            conta?: string;
+                            autorizado?: boolean;
+                            /** Format: date-time */
+                            ultimaSincronizacao?: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        /**
+         * Desconectar o calendário externo (UC-09, RN13)
+         * @description Apaga a autorização e os compromissos importados.
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Calendário desconectado. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendario-externo/google/autorizacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Iniciar a autorização do Google Agenda (UC-09)
+         * @description Devolve o endereço de consentimento do Google (só leitura do calendário). O app abre no
+         *     navegador; o Google volta para a rota de retorno. Sem GOOGLE_CLIENT_ID e
+         *     GOOGLE_CLIENT_SECRET, o calendário é simulado e o endereço volta direto para a API.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Endereço de consentimento, válido por 10 minutos. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uri */
+                            url: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/calendario-externo/google/retorno": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retorno do consentimento do Google (UC-09) */
+        get: {
+            parameters: {
+                query: {
+                    code?: string;
+                    state: string;
+                    error?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /**
+                 * @description Volta para o app em `<URL_APP>/calendario?resultado=conectado|negado|erro`. Acesso
+                 *     negado ou estado inválido não guarda nada (CT-09-02).
+                 */
+                302: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/pets/{petId}/calendario-externo/sincronizacao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                petId: components["parameters"]["PetId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sincronizar o calendário externo com a agenda do pet (UC-09, CT-09-01)
+         * @description Importa os compromissos dos próximos 30 dias como eventos de origem CALENDARIO_EXTERNO; os que saíram do calendário externo são removidos.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Resumo da sincronização. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            importados: number;
+                            atualizados: number;
+                            removidos: number;
+                        };
+                    };
+                };
+                404: components["responses"]["NaoEncontrado"];
+                /** @description Calendário não autorizado ou autorização revogada (RN13_SEM_AUTORIZACAO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+                /** @description Google Agenda indisponível (CALENDARIO_INDISPONIVEL). */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
             };
         };
         delete?: never;
@@ -1882,6 +2233,92 @@ export interface paths {
             };
         };
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/dispositivos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar o aparelho para push (UC-31)
+         * @description O app registra o token de push do Expo depois do login. O mesmo aparelho com outra conta
+         *     passa para a conta atual. Com PUSH_EXPO ligado, o worker manda os lembretes por push.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @example ExponentPushToken[xxxxxxxx] */
+                        token: string;
+                        /** @enum {string} */
+                        plataforma: "ios" | "android" | "web";
+                    };
+                };
+            };
+            responses: {
+                /** @description Aparelho registrado. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                422: components["responses"]["Validacao"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/dispositivos/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Tirar o aparelho da conta na saída (UC-31) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    token: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Aparelho removido da conta. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -2865,6 +3302,88 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/minhas-solicitacoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Minhas solicitações, com nomes e situação (UC-42)
+         * @description Só o tutor. Da mais recente para a mais antiga, já com serviço, empresa, pet, agendamento, pagamento e se ainda pode cancelar.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Solicitações do tutor. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalheSolicitacao"][];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/solicitacoes/{solicitacaoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                solicitacaoId: components["parameters"]["SolicitacaoId"];
+            };
+            cookie?: never;
+        };
+        /** Detalhes da solicitação com o histórico (UC-42, CT-42-01) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    solicitacaoId: components["parameters"]["SolicitacaoId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Status atual, histórico e se pode cancelar. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DetalheSolicitacao"];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/solicitacoes/{solicitacaoId}/cancelamento": {
         parameters: {
             query?: never;
@@ -2876,7 +3395,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Cancelar solicitação (UC-42) */
+        /**
+         * Cancelar solicitação (UC-42)
+         * @description Pendente ou aceita, antes do horário. Se já aceita, o agendamento é desfeito e o horário
+         *     volta para a agenda; a empresa recebe e-mail e o histórico registra o tutor como autor (RN38).
+         */
         post: {
             parameters: {
                 query?: never;
@@ -2895,7 +3418,16 @@ export interface paths {
                     };
                     content?: never;
                 };
-                409: components["responses"]["Conflito"];
+                404: components["responses"]["NaoEncontrado"];
+                /** @description Status ou horário não permitem cancelar (RN38_CANCELAMENTO_BLOQUEADO, CT-42-02). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
             };
         };
         delete?: never;
@@ -2913,7 +3445,7 @@ export interface paths {
             };
             cookie?: never;
         };
-        /** Histórico de status da solicitação (RN38) */
+        /** Histórico de status da solicitação para o tutor (RN38) */
         get: {
             parameters: {
                 query?: never;
@@ -3323,8 +3855,180 @@ export interface paths {
             };
         };
         put?: never;
+        /** Criar perfil de acesso (UC-16, RN20) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PerfilEntrada"];
+                };
+            };
+            responses: {
+                /** @description Perfil criado e auditado. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PerfilDaEmpresa"];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                /** @description Já existe perfil com esse nome (PERFIL_DUPLICADO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+                422: components["responses"]["Validacao"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/empresas/{empresaId}/permissoes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                empresaId: components["parameters"]["EmpresaId"];
+            };
+            cookie?: never;
+        };
+        /** Listar as permissões que a empresa pode distribuir (UC-16) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    empresaId: components["parameters"]["EmpresaId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Permissões do catálogo para perfis de empresa. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            codigo: string;
+                            modulo: string;
+                            descricao: string;
+                        }[];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+            };
+        };
+        put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/perfis/{perfilId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                perfilId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Alterar perfil de acesso (UC-16, RN20)
+         * @description As sessões de quem usa o perfil são encerradas para as permissões novas valerem na hora.
+         */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    perfilId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PerfilEntrada"];
+                };
+            };
+            responses: {
+                /** @description Perfil alterado e auditado. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PerfilDaEmpresa"];
+                    };
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                /** @description Perfil Proprietário (PERFIL_PROTEGIDO) ou nome repetido (PERFIL_DUPLICADO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+                422: components["responses"]["Validacao"];
+            };
+        };
+        post?: never;
+        /** Excluir perfil de acesso (UC-16) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    perfilId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Perfil excluído e auditado. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+                /** @description Perfil Proprietário (PERFIL_PROTEGIDO) ou com pessoas (PERFIL_EM_USO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -5370,6 +6074,19 @@ export interface components {
                 pet?: string;
             }[];
         };
+        Documento: {
+            /** Format: uuid */
+            id: string;
+            titulo: string;
+            tipo: components["schemas"]["TipoDocumento"];
+            nomeArquivo: string;
+            /** Format: date */
+            dataEmissao?: string;
+            /** Format: date */
+            dataValidade?: string;
+            /** Format: date-time */
+            dataUpload: string;
+        };
         PetVinculado: {
             /** Format: uuid */
             id: string;
@@ -5711,10 +6428,51 @@ export interface components {
         };
         HistoricoSolicitacao: {
             /** Format: date-time */
-            dataHora?: string;
+            dataHora: string;
             statusAnterior?: components["schemas"]["StatusSolicitacao"];
-            statusNovo?: components["schemas"]["StatusSolicitacao"];
-            autor?: string;
+            statusNovo: components["schemas"]["StatusSolicitacao"];
+            /** @description "Você" ou o nome da empresa. */
+            autor: string;
+            descricao?: string;
+        };
+        DetalheSolicitacao: {
+            /** Format: uuid */
+            id: string;
+            status: components["schemas"]["StatusSolicitacao"];
+            /** Format: date-time */
+            dataHoraDesejada: string;
+            observacoes?: string;
+            motivoRecusa?: string;
+            servico: {
+                /** Format: uuid */
+                id: string;
+                nome: string;
+                preco: number;
+                duracaoMinutos: number;
+            };
+            empresa: {
+                /** Format: uuid */
+                id: string;
+                nome: string;
+            };
+            pet: {
+                /** Format: uuid */
+                id: string;
+                nome: string;
+            };
+            agendamento?: {
+                /** Format: uuid */
+                id: string;
+                /** Format: date-time */
+                dataHoraInicio: string;
+                precoContratado: number;
+                /** @enum {string} */
+                status: "AGENDADO" | "CANCELADO" | "REALIZADO" | "NAO_COMPARECEU";
+                pagamento?: components["schemas"]["StatusPagamento"];
+            };
+            podeCancelar: boolean;
+            motivoSemCancelamento?: string;
+            historico: components["schemas"]["HistoricoSolicitacao"][];
             descricao?: string;
         };
         AgendamentoEntrada: {
@@ -5785,6 +6543,11 @@ export interface components {
             ativo?: boolean;
             /** @description Convite ainda não aceito: o funcionário não criou a senha (RN02). */
             pendente?: boolean;
+        };
+        PerfilEntrada: {
+            nome: string;
+            descricao?: string;
+            permissoes: string[];
         };
         PerfilDaEmpresa: {
             /** Format: uuid */

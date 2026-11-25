@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Jaguara API
-  version: 1.36.0
+  version: 1.41.0
   summary: API REST da plataforma Jaguara (tutores e empresas Enterprise).
   description: |
     Contrato da API do Jaguara (tarefa JAG-68). Os recursos seguem o modelo de classes
@@ -729,10 +729,26 @@ paths:
   /pets/{petId}/documentos:
     parameters:
       - $ref: '#/components/parameters/PetId'
+    get:
+      tags: [Saúde]
+      summary: Listar documentos do pet (UC-34)
+      description: Tutor responsável ou empresa com o escopo DOCUMENTOS (RN15). A lista não traz endereço de arquivo.
+      responses:
+        '200':
+          description: Documentos, do envio mais recente para o mais antigo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Documento' }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
     post:
       tags: [Saúde]
       summary: Iniciar envio de documento (UC-34)
-      description: Retorna uma URL assinada de envio válida por 5 minutos.
+      description: |
+        Registra o documento e devolve a URL assinada para o aparelho enviar o arquivo com PUT,
+        válida por 5 minutos (ADR-005). Aceita PDF, JPG, PNG, WEBP e HEIC até 10 MB.
       requestBody:
         required: true
         content:
@@ -741,10 +757,12 @@ paths:
               type: object
               required: [titulo, tipo, nomeArquivo, tamanhoBytes]
               properties:
-                titulo: { type: string }
+                titulo: { type: string, maxLength: 255 }
                 tipo: { $ref: '#/components/schemas/TipoDocumento' }
-                nomeArquivo: { type: string }
-                tamanhoBytes: { type: integer, maximum: 10485760 }
+                nomeArquivo: { type: string, maxLength: 255 }
+                tamanhoBytes: { type: integer, minimum: 1, maximum: 10485760 }
+                dataEmissao: { type: string, format: date }
+                dataValidade: { type: string, format: date }
       responses:
         '201':
           description: Documento criado e URL de envio.
@@ -752,9 +770,55 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [documentoId, urlEnvio, expiraEm]
                 properties:
                   documentoId: { type: string, format: uuid }
                   urlEnvio: { type: string, format: uri }
+                  expiraEm: { type: string, format: date-time }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '422': { $ref: '#/components/responses/Validacao' }
+  /documentos/{documentoId}/download:
+    parameters:
+      - in: path
+        name: documentoId
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      tags: [Saúde]
+      summary: Baixar documento do pet (UC-34)
+      description: URL assinada de download, válida por 5 minutos, que baixa com o nome original (CT-34-02).
+      responses:
+        '200':
+          description: URL de download.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [url, expiraEm]
+                properties:
+                  url: { type: string, format: uri }
+                  expiraEm: { type: string, format: date-time }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /documentos/{documentoId}:
+    parameters:
+      - in: path
+        name: documentoId
+        required: true
+        schema: { type: string, format: uuid }
+    delete:
+      tags: [Saúde]
+      summary: Excluir documento do pet (UC-34)
+      responses:
+        '204': { description: Documento excluído e auditado. }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: "O documento é o laudo de um exame (DOCUMENTO_EM_USO)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
   /pets/{petId}/eventos:
     parameters:
       - $ref: '#/components/parameters/PetId'
@@ -798,6 +862,90 @@ paths:
             application/problem+json:
               schema: { $ref: '#/components/schemas/Problema' }
         '422': { $ref: '#/components/responses/Validacao' }
+  /calendario-externo:
+    get:
+      tags: [Rotina]
+      summary: Situação do calendário externo do tutor (UC-09)
+      responses:
+        '200':
+          description: Conta conectada, se autorizada e a última sincronização; vazio quando não há conexão.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provedor: { type: string, enum: [GOOGLE] }
+                  conta: { type: string }
+                  autorizado: { type: boolean }
+                  ultimaSincronizacao: { type: string, format: date-time }
+    delete:
+      tags: [Rotina]
+      summary: Desconectar o calendário externo (UC-09, RN13)
+      description: Apaga a autorização e os compromissos importados.
+      responses:
+        '204': { description: Calendário desconectado. }
+  /calendario-externo/google/autorizacao:
+    post:
+      tags: [Rotina]
+      summary: Iniciar a autorização do Google Agenda (UC-09)
+      description: |
+        Devolve o endereço de consentimento do Google (só leitura do calendário). O app abre no
+        navegador; o Google volta para a rota de retorno. Sem GOOGLE_CLIENT_ID e
+        GOOGLE_CLIENT_SECRET, o calendário é simulado e o endereço volta direto para a API.
+      responses:
+        '201':
+          description: Endereço de consentimento, válido por 10 minutos.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [url]
+                properties:
+                  url: { type: string, format: uri }
+  /calendario-externo/google/retorno:
+    get:
+      tags: [Rotina]
+      summary: Retorno do consentimento do Google (UC-09)
+      security: []
+      parameters:
+        - { in: query, name: code, schema: { type: string } }
+        - { in: query, name: state, required: true, schema: { type: string } }
+        - { in: query, name: error, schema: { type: string } }
+      responses:
+        '302':
+          description: |
+            Volta para o app em `<URL_APP>/calendario?resultado=conectado|negado|erro`. Acesso
+            negado ou estado inválido não guarda nada (CT-09-02).
+  /pets/{petId}/calendario-externo/sincronizacao:
+    parameters:
+      - $ref: '#/components/parameters/PetId'
+    post:
+      tags: [Rotina]
+      summary: Sincronizar o calendário externo com a agenda do pet (UC-09, CT-09-01)
+      description: Importa os compromissos dos próximos 30 dias como eventos de origem CALENDARIO_EXTERNO; os que saíram do calendário externo são removidos.
+      responses:
+        '201':
+          description: Resumo da sincronização.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [importados, atualizados, removidos]
+                properties:
+                  importados: { type: integer }
+                  atualizados: { type: integer }
+                  removidos: { type: integer }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: "Calendário não autorizado ou autorização revogada (RN13_SEM_AUTORIZACAO)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
+        '503':
+          description: "Google Agenda indisponível (CALENDARIO_INDISPONIVEL)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
   /eventos/{eventoId}:
     parameters:
       - in: path
@@ -909,6 +1057,37 @@ paths:
                   - $ref: '#/components/schemas/ResumoAlimentar'
         '404': { $ref: '#/components/responses/NaoEncontrado' }
         '422': { $ref: '#/components/responses/Validacao' }
+  /dispositivos:
+    post:
+      tags: [Comunicação]
+      summary: Registrar o aparelho para push (UC-31)
+      description: |
+        O app registra o token de push do Expo depois do login. O mesmo aparelho com outra conta
+        passa para a conta atual. Com PUSH_EXPO ligado, o worker manda os lembretes por push.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, plataforma]
+              properties:
+                token: { type: string, maxLength: 255, example: 'ExponentPushToken[xxxxxxxx]' }
+                plataforma: { type: string, enum: [ios, android, web] }
+      responses:
+        '204': { description: Aparelho registrado. }
+        '422': { $ref: '#/components/responses/Validacao' }
+  /dispositivos/{token}:
+    parameters:
+      - in: path
+        name: token
+        required: true
+        schema: { type: string }
+    delete:
+      tags: [Comunicação]
+      summary: Tirar o aparelho da conta na saída (UC-31)
+      responses:
+        '204': { description: Aparelho removido da conta. }
   /notificacoes:
     get:
       tags: [Rotina]
@@ -1382,21 +1561,57 @@ paths:
         '404': { $ref: '#/components/responses/NaoEncontrado' }
         '409': { $ref: '#/components/responses/Conflito' }
         '422': { $ref: '#/components/responses/Validacao' }
+  /minhas-solicitacoes:
+    get:
+      tags: [Solicitações e agendamentos]
+      summary: Minhas solicitações, com nomes e situação (UC-42)
+      description: Só o tutor. Da mais recente para a mais antiga, já com serviço, empresa, pet, agendamento, pagamento e se ainda pode cancelar.
+      responses:
+        '200':
+          description: Solicitações do tutor.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/DetalheSolicitacao' }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+  /solicitacoes/{solicitacaoId}:
+    parameters:
+      - $ref: '#/components/parameters/SolicitacaoId'
+    get:
+      tags: [Solicitações e agendamentos]
+      summary: Detalhes da solicitação com o histórico (UC-42, CT-42-01)
+      responses:
+        '200':
+          description: Status atual, histórico e se pode cancelar.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DetalheSolicitacao' }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
   /solicitacoes/{solicitacaoId}/cancelamento:
     parameters:
       - $ref: '#/components/parameters/SolicitacaoId'
     post:
       tags: [Solicitações e agendamentos]
       summary: Cancelar solicitação (UC-42)
+      description: |
+        Pendente ou aceita, antes do horário. Se já aceita, o agendamento é desfeito e o horário
+        volta para a agenda; a empresa recebe e-mail e o histórico registra o tutor como autor (RN38).
       responses:
         '204': { description: "Solicitação CANCELADA e horário liberado." }
-        '409': { $ref: '#/components/responses/Conflito' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: "Status ou horário não permitem cancelar (RN38_CANCELAMENTO_BLOQUEADO, CT-42-02)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
   /solicitacoes/{solicitacaoId}/historico:
     parameters:
       - $ref: '#/components/parameters/SolicitacaoId'
     get:
       tags: [Solicitações e agendamentos]
-      summary: Histórico de status da solicitação (RN38)
+      summary: Histórico de status da solicitação para o tutor (RN38)
       responses:
         '200':
           description: Mudanças de status em ordem.
@@ -1579,6 +1794,89 @@ paths:
                 type: array
                 items: { $ref: '#/components/schemas/PerfilDaEmpresa' }
         '403': { $ref: '#/components/responses/SemPermissao' }
+    post:
+      tags: [Empresa]
+      summary: Criar perfil de acesso (UC-16, RN20)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PerfilEntrada' }
+      responses:
+        '201':
+          description: Perfil criado e auditado.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PerfilDaEmpresa' }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '409':
+          description: "Já existe perfil com esse nome (PERFIL_DUPLICADO)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
+        '422': { $ref: '#/components/responses/Validacao' }
+  /empresas/{empresaId}/permissoes:
+    parameters:
+      - $ref: '#/components/parameters/EmpresaId'
+    get:
+      tags: [Empresa]
+      summary: Listar as permissões que a empresa pode distribuir (UC-16)
+      responses:
+        '200':
+          description: Permissões do catálogo para perfis de empresa.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [codigo, modulo, descricao]
+                  properties:
+                    codigo: { type: string }
+                    modulo: { type: string }
+                    descricao: { type: string }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+  /perfis/{perfilId}:
+    parameters:
+      - in: path
+        name: perfilId
+        required: true
+        schema: { type: string, format: uuid }
+    put:
+      tags: [Empresa]
+      summary: Alterar perfil de acesso (UC-16, RN20)
+      description: As sessões de quem usa o perfil são encerradas para as permissões novas valerem na hora.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PerfilEntrada' }
+      responses:
+        '200':
+          description: Perfil alterado e auditado.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PerfilDaEmpresa' }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: "Perfil Proprietário (PERFIL_PROTEGIDO) ou nome repetido (PERFIL_DUPLICADO)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
+        '422': { $ref: '#/components/responses/Validacao' }
+    delete:
+      tags: [Empresa]
+      summary: Excluir perfil de acesso (UC-16)
+      responses:
+        '204': { description: Perfil excluído e auditado. }
+        '403': { $ref: '#/components/responses/SemPermissao' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: "Perfil Proprietário (PERFIL_PROTEGIDO) ou com pessoas (PERFIL_EM_USO)."
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problema' }
   /funcionarios/{funcionarioId}:
     parameters:
       - in: path
@@ -2789,6 +3087,17 @@ components:
               data: { type: string, format: date }
               categoria: { type: string }
               pet: { type: string }
+    Documento:
+      type: object
+      required: [id, titulo, tipo, nomeArquivo, dataUpload]
+      properties:
+        id: { type: string, format: uuid }
+        titulo: { type: string }
+        tipo: { $ref: '#/components/schemas/TipoDocumento' }
+        nomeArquivo: { type: string }
+        dataEmissao: { type: string, format: date }
+        dataValidade: { type: string, format: date }
+        dataUpload: { type: string, format: date-time }
     PetVinculado:
       type: object
       required: [id, nome, especie, raca, sexo, status, motivos, secoes]
@@ -3168,11 +3477,56 @@ components:
         motivoRecusa: { type: string }
     HistoricoSolicitacao:
       type: object
+      required: [dataHora, statusNovo, autor]
       properties:
         dataHora: { type: string, format: date-time }
         statusAnterior: { $ref: '#/components/schemas/StatusSolicitacao' }
         statusNovo: { $ref: '#/components/schemas/StatusSolicitacao' }
-        autor: { type: string }
+        autor: { type: string, description: '"Você" ou o nome da empresa.' }
+        descricao: { type: string }
+    DetalheSolicitacao:
+      type: object
+      required: [id, status, dataHoraDesejada, servico, empresa, pet, podeCancelar, historico]
+      properties:
+        id: { type: string, format: uuid }
+        status: { $ref: '#/components/schemas/StatusSolicitacao' }
+        dataHoraDesejada: { type: string, format: date-time }
+        observacoes: { type: string }
+        motivoRecusa: { type: string }
+        servico:
+          type: object
+          required: [id, nome, preco, duracaoMinutos]
+          properties:
+            id: { type: string, format: uuid }
+            nome: { type: string }
+            preco: { type: number }
+            duracaoMinutos: { type: integer }
+        empresa:
+          type: object
+          required: [id, nome]
+          properties:
+            id: { type: string, format: uuid }
+            nome: { type: string }
+        pet:
+          type: object
+          required: [id, nome]
+          properties:
+            id: { type: string, format: uuid }
+            nome: { type: string }
+        agendamento:
+          type: object
+          required: [id, dataHoraInicio, precoContratado, status]
+          properties:
+            id: { type: string, format: uuid }
+            dataHoraInicio: { type: string, format: date-time }
+            precoContratado: { type: number }
+            status: { type: string, enum: [AGENDADO, CANCELADO, REALIZADO, NAO_COMPARECEU] }
+            pagamento: { $ref: '#/components/schemas/StatusPagamento' }
+        podeCancelar: { type: boolean }
+        motivoSemCancelamento: { type: string }
+        historico:
+          type: array
+          items: { $ref: '#/components/schemas/HistoricoSolicitacao' }
         descricao: { type: string }
     AgendamentoEntrada:
       type: object
@@ -3245,6 +3599,16 @@ components:
         perfilId: { type: string, format: uuid }
         ativo: { type: boolean }
         pendente: { type: boolean, description: "Convite ainda não aceito: o funcionário não criou a senha (RN02)." }
+    PerfilEntrada:
+      type: object
+      required: [nome, permissoes]
+      properties:
+        nome: { type: string, minLength: 3, maxLength: 60 }
+        descricao: { type: string, maxLength: 255 }
+        permissoes:
+          type: array
+          minItems: 1
+          items: { type: string }
     PerfilDaEmpresa:
       type: object
       required: [id, nome, permissoes]
