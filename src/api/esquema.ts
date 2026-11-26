@@ -3372,7 +3372,7 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Solicitações do usuário autenticado. */
+                /** @description Solicitações do usuário autenticado, com os nomes do serviço, do pet e do tutor para a lista da empresa (UC-41). */
                 200: {
                     headers: {
                         [name: string]: unknown;
@@ -6882,6 +6882,14 @@ export interface components {
             dataHoraDesejada?: string;
             status?: components["schemas"]["StatusSolicitacao"];
             motivoRecusa?: string;
+            /** @description Nome do serviço (na listagem). */
+            servico?: string;
+            /** @description Nome do pet (na listagem). */
+            pet?: string;
+            /** @description Nome do tutor (na listagem). */
+            tutor?: string;
+            /** @description Observações do tutor ao pedir (na listagem). */
+            observacoes?: string;
         };
         HistoricoSolicitacao: {
             /** Format: date-time */
