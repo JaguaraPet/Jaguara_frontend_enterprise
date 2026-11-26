@@ -14,6 +14,7 @@ export const itensEmpresa: (ItemMenu & { descricao: string })[] = [
   { rotulo: 'Pets vinculados', caminho: '/pets', permissao: 'cliente:ler', descricao: 'Pets compartilhados com a empresa (UC-20, UC-22)' },
   { rotulo: 'Chat', caminho: '/chat', permissao: 'chat:usar', descricao: 'Conversas com os tutores (UC-43)' },
   { rotulo: 'Funcionários', caminho: '/funcionarios', permissao: 'funcionario:ler', descricao: 'Equipe e perfis de acesso (UC-19, UC-16)' },
+  { rotulo: 'Perfis de acesso', caminho: '/perfis', permissao: 'funcionario:ler', descricao: 'Perfis da equipe e as permissões de cada um (UC-16)' },
   { rotulo: 'Indicadores', caminho: '/indicadores', permissao: 'relatorio:ler', descricao: 'Indicadores da operação (UC-17)' },
   { rotulo: 'Relatórios', caminho: '/relatorios', permissao: 'relatorio:ler', descricao: 'Relatórios em tela e PDF (UC-18)' },
   { rotulo: 'Pagamentos', caminho: '/pagamentos', permissao: 'financeiro:ler', descricao: 'Pagamentos recebidos (UC-45)' },
