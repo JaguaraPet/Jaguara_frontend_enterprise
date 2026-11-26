@@ -1,0 +1,23 @@
+.solicitacoes {
+  display: grid;
+  gap: var(--espaco-md);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+}
+
+.solicitacoes__obs {
+  margin: 0;
+  font-style: italic;
+}
+
+.solicitacoes__aceite,
+.solicitacoes__recusa {
+  display: grid;
+  gap: var(--espaco-sm);
+}
+
+.solicitacoes__recusa textarea {
+  font: inherit;
+  padding: var(--espaco-sm);
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda, #d9d1c7);
+}
