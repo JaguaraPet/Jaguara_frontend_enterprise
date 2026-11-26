@@ -98,3 +98,9 @@
   color: var(--cor-texto-secundario);
   font-size: 0.85em;
 }
+
+/* Chamados de suporte (UC-26): a descrição mantém as quebras de linha dos complementos. */
+.admin__descricao {
+  white-space: pre-wrap;
+  margin: 0 0 var(--espaco-md);
+}
