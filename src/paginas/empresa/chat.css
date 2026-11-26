@@ -1,0 +1,124 @@
+/* Chat da empresa (UC-43): lista de conversas à esquerda e a conversa aberta à direita. */
+.chat {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: var(--espaco-md);
+  min-height: 60vh;
+}
+
+.chat__lista {
+  display: grid;
+  align-content: start;
+  gap: var(--espaco-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat__conversa {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  min-height: var(--alvo-toque-minimo);
+  padding: var(--espaco-sm) var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  text-align: left;
+  font: var(--fonte-corpo);
+  cursor: pointer;
+  position: relative;
+}
+
+.chat__conversa--aberta {
+  border-color: var(--cor-primaria);
+  background: var(--cor-superficie);
+}
+
+.chat__previa {
+  overflow: hidden;
+  color: var(--cor-texto-secundario);
+  font: var(--fonte-legenda);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chat__naolidas {
+  position: absolute;
+  top: var(--espaco-sm);
+  right: var(--espaco-sm);
+  min-width: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font: var(--fonte-legenda);
+  text-align: center;
+}
+
+.chat__conversa-aberta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+  padding: var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.chat__mensagens {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--espaco-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  max-height: 55vh;
+}
+
+.chat__mensagens li {
+  display: grid;
+  gap: 2px;
+  max-width: 75%;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-padrao);
+}
+
+.chat__dele {
+  align-self: flex-start;
+  background: var(--cor-superficie);
+}
+
+.chat__minha {
+  align-self: flex-end;
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+}
+
+.chat__autor {
+  font: var(--fonte-legenda);
+  opacity: 0.85;
+}
+
+.chat__envio {
+  display: flex;
+  gap: var(--espaco-sm);
+  align-items: flex-end;
+}
+
+.chat__envio textarea {
+  flex: 1;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border: 1px solid var(--cor-texto-secundario);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+  resize: vertical;
+}
+
+@media (max-width: 768px) {
+  .chat {
+    grid-template-columns: 1fr;
+  }
+}
