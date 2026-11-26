@@ -737,6 +737,237 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/pets/{petId}/falecimento": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                petId: components["parameters"]["PetId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar o falecimento do pet (UC-15)
+         * @description Só o responsável principal. O pet fica FALECIDO, os remédios em uso terminam e os lembretes pendentes do pet são cancelados.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Falecimento registrado e auditado. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["SemPermissao"];
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/pets/{petId}/memorial": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                petId: components["parameters"]["PetId"];
+            };
+            cookie?: never;
+        };
+        /** Ver o memorial do pet (UC-15) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Mensagem e lembranças; as fotos vêm com URL assinada de leitura (5 minutos). */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Memorial"];
+                    };
+                };
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        /** Criar ou alterar a mensagem do memorial (UC-15, RN19) */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        mensagem: string;
+                        publico: boolean;
+                    };
+                };
+            };
+            responses: {
+                /** @description Memorial salvo. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Memorial"];
+                    };
+                };
+                /** @description Pet sem o falecimento registrado (RN19_MEMORIAL_BLOQUEADO, CT-15-02). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/pets/{petId}/memorial/itens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                petId: components["parameters"]["PetId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Adicionar lembrança ao memorial (UC-15)
+         * @description Texto ou homenagem vão no corpo; foto (JPG, PNG, WEBP ou HEIC até 8 MB) devolve a URL assinada de envio (PUT, 5 minutos).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    petId: components["parameters"]["PetId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        tipo: "FOTO" | "TEXTO" | "HOMENAGEM";
+                        conteudo?: string;
+                        nomeArquivo?: string;
+                        tamanhoBytes?: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description Lembrança criada. */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            itemId: string;
+                            /** Format: uri */
+                            urlEnvio?: string;
+                            /** Format: date-time */
+                            expiraEm?: string;
+                        };
+                    };
+                };
+                /** @description Pet sem o falecimento registrado (RN19_MEMORIAL_BLOQUEADO). */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
+                422: components["responses"]["Validacao"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/memorial/itens/{itemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                itemId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remover lembrança do memorial (UC-15) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    itemId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Lembrança removida. */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                404: components["responses"]["NaoEncontrado"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/pets/{petId}/responsaveis": {
         parameters: {
             query?: never;
@@ -4817,13 +5048,13 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Conversas do usuário. */
+                /** @description Conversas do usuário, da mais recente para a mais antiga, com os nomes, a última mensagem e quantas o usuário ainda não leu. */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Conversa"][];
+                        "application/json": components["schemas"]["ConversaResumo"][];
                     };
                 };
             };
@@ -6295,6 +6526,24 @@ export interface components {
             /** Format: date-time */
             dataUpload: string;
         };
+        Memorial: {
+            /** Format: uuid */
+            petId: string;
+            nome: string;
+            mensagem?: string;
+            publico: boolean;
+            itens: {
+                /** Format: uuid */
+                id: string;
+                /** @enum {string} */
+                tipo: "FOTO" | "TEXTO" | "HOMENAGEM";
+                conteudo?: string;
+                /** Format: uri */
+                urlFoto?: string;
+                /** Format: date-time */
+                dataRegistro: string;
+            }[];
+        };
         PetVinculado: {
             /** Format: uuid */
             id: string;
@@ -6909,6 +7158,8 @@ export interface components {
         Conversa: {
             /** Format: uuid */
             id?: string;
+            /** Format: uuid */
+            tutorId?: string;
             tipo?: components["schemas"]["TipoConversa"];
             /** Format: uuid */
             empresaId?: string;
@@ -6916,6 +7167,18 @@ export interface components {
             petId?: string;
             /** @enum {string} */
             status?: "ABERTA" | "ENCERRADA";
+        };
+        ConversaResumo: components["schemas"]["Conversa"] & {
+            tutor: string;
+            empresa?: string;
+            pet?: string;
+            naoLidas: number;
+            ultimaMensagem?: {
+                conteudo?: string;
+                /** Format: date-time */
+                dataHoraEnvio?: string;
+                minha?: boolean;
+            };
         };
         Mensagem: {
             /** Format: uuid */
