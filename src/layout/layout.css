@@ -171,3 +171,82 @@
   color: var(--cor-texto);
   cursor: pointer;
 }
+
+/* Faixa da demonstração pública */
+.barra-demonstracao {
+  display: flex;
+  margin-bottom: var(--espaco-xl);
+  border-radius: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-sm) var(--espaco-lg);
+  padding: var(--espaco-sm) var(--espaco-xl);
+  background: var(--cor-secundaria);
+  color: var(--cor-branco);
+  font: var(--fonte-legenda);
+}
+
+.barra-demonstracao p {
+  margin: 0;
+}
+
+.barra-demonstracao__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+}
+
+.barra-demonstracao a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 var(--espaco-lg);
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 999px;
+  color: var(--cor-branco);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.barra-demonstracao a:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.barra-demonstracao a:focus-visible {
+  outline: 3px solid var(--cor-branco);
+  outline-offset: 2px;
+}
+
+.barra-demonstracao__opiniao {
+  background: var(--cor-branco);
+  color: var(--cor-secundaria) !important;
+  border-color: var(--cor-branco) !important;
+}
+
+.barra-demonstracao__opiniao:hover {
+  background: var(--cor-superficie) !important;
+}
+
+.layout__empresa {
+  margin: 0;
+  padding-left: var(--espaco-lg);
+  border-left: 1px solid var(--cor-borda);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.layout__grupo + .layout__grupo {
+  margin-top: var(--espaco-lg);
+}
+
+.layout__grupo-titulo {
+  margin: 0 0 var(--espaco-xs);
+  padding: 0 var(--espaco-md);
+  font: var(--fonte-legenda);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-texto-secundario);
+}

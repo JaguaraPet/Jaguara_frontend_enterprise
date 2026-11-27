@@ -96,6 +96,11 @@ export function Entrar({ tipos, titulo, destino, rodape = true }: Props) {
             <Link to="/cadastro">Cadastrar minha empresa</Link>
           </div>
         )}
+        {rodape && (
+          <p className="entrar__demonstracao">
+            Quer conhecer antes? <Link to="/demonstracao">Experimente a demonstração</Link>
+          </p>
+        )}
       </form>
     </main>
   );

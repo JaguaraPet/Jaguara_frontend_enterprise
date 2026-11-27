@@ -116,7 +116,7 @@ export function Perfis() {
   return (
     <div className="pagina">
       <h1>Perfis de acesso</h1>
-      <p>Cada funcionário usa um perfil, e o perfil define o que ele vê e faz no Jaguara (RN20).</p>
+      <p>Cada funcionário usa um perfil, e o perfil define o que ele vê e faz no Jaguara.</p>
       {perfis === null ? (
         <p role="status">Carregando…</p>
       ) : (
@@ -157,7 +157,7 @@ export function Perfis() {
                 </fieldset>
               ))}
               {!somenteLeitura && marcadas.length === 0 && (
-                <Alerta tipo="alerta" titulo="Marque ao menos uma permissão" mensagem="Um perfil sem permissão não é aceito (RN20)." />
+                <Alerta tipo="alerta" titulo="Marque ao menos uma permissão" mensagem="Um perfil sem permissão não é aceito." />
               )}
               {!somenteLeitura && (
                 <div className="admin__acoes">

@@ -138,7 +138,7 @@ export function Clientes() {
       )}
 
       {podeEditar && (
-        <Cartao titulo="Novo cliente" subtitulo="O cliente precisa consentir com o termo da empresa (RN41).">
+        <Cartao titulo="Novo cliente" subtitulo="O cliente precisa consentir com o termo da empresa.">
           <form className="admin__formulario" onSubmit={cadastrar} aria-label="Novo cliente">
             <Campo rotulo="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
             <Campo rotulo="E-mail" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
@@ -257,7 +257,7 @@ export function Clientes() {
                         <Botao
                           variante="secundaria"
                           disabled={c.consentimento !== 'VIGENTE'}
-                          title={c.consentimento !== 'VIGENTE' ? 'Só depois do consentimento (RN41)' : undefined}
+                          title={c.consentimento !== 'VIGENTE' ? 'Só depois do consentimento' : undefined}
                           aria-label={`Cadastrar pet de ${c.nome}`}
                           onClick={() => setPetDe(c)}
                         >

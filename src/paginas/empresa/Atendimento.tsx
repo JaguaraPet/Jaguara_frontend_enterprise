@@ -252,7 +252,7 @@ export function RegistrarAtendimento() {
       )}
 
       {atendimento && editando && (
-        <Cartao titulo="Alterar registro" subtitulo="Toda alteração depois de finalizado fica na auditoria (RN28).">
+        <Cartao titulo="Alterar registro" subtitulo="Toda alteração depois de finalizado fica na auditoria.">
           <form className="atendimento__formulario" onSubmit={salvarEdicao} aria-label="Alterar atendimento">
             <label className="admin__selecao">
               Procedimentos realizados

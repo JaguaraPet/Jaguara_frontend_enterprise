@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
+import { api } from '../api/cliente';
 import { sessao } from '../api/sessao';
 import { useUsuario } from '../sessao/useUsuario';
+import { BarraDemonstracao } from './BarraDemonstracao';
 import './layout.css';
 
 export interface ItemMenu {
+  /** Seção do menu em que o item aparece; itens sem grupo ficam no topo. */
+  grupo?: string;
   rotulo: string;
   caminho: string;
   /** Permissão necessária para ver o item (RN20). Sem permissão, o item aparece para todos. */
@@ -31,6 +35,8 @@ export function LayoutComMenu({ area, itens, sairPara, extras }: Props) {
   const visiveis = itens.filter(
     (item) => !item.permissao || usuario?.permissoes.includes(item.permissao),
   );
+  const grupos = [...new Set(visiveis.map((item) => item.grupo ?? ''))];
+  const nomeEmpresa = useNomeEmpresa(usuario?.empresaId ?? null);
 
   return (
     <div className="layout">
@@ -47,6 +53,7 @@ export function LayoutComMenu({ area, itens, sairPara, extras }: Props) {
         <p className="layout__marca">
           Jaguara <span>{area}</span>
         </p>
+        {nomeEmpresa && <p className="layout__empresa">{nomeEmpresa}</p>}
         <div className="layout__usuario">
           <span>{usuario?.perfil}</span>
           <button
@@ -63,20 +70,47 @@ export function LayoutComMenu({ area, itens, sairPara, extras }: Props) {
         aria-label="Menu principal"
         className={`layout__menu${aberto ? ' layout__menu--aberto' : ''}`}
       >
-        <ul>
-          {visiveis.map((item) => (
-            <li key={item.caminho}>
-              <NavLink to={item.caminho} end onClick={() => setAberto(false)}>
-                {item.rotulo}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        {grupos.map((grupo) => (
+          <div key={grupo || 'topo'} className="layout__grupo">
+            {grupo && <p className="layout__grupo-titulo">{grupo}</p>}
+            <ul>
+              {visiveis
+                .filter((item) => (item.grupo ?? '') === grupo)
+                .map((item) => (
+                  <li key={item.caminho}>
+                    <NavLink to={item.caminho} end onClick={() => setAberto(false)}>
+                      {item.rotulo}
+                    </NavLink>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))}
       </nav>
       <main className="layout__conteudo">
+        <BarraDemonstracao />
         {extras}
         <Outlet />
       </main>
     </div>
   );
+}
+
+/** Nome fantasia da empresa do usuário, para o topo mostrar de quem é o sistema. */
+function useNomeEmpresa(empresaId: string | null): string | null {
+  const [nome, setNome] = useState<string | null>(null);
+  useEffect(() => {
+    if (!empresaId) return;
+    let ativo = true;
+    void api
+      .GET('/empresas/{empresaId}', { params: { path: { empresaId } } })
+      .then(({ data }) => {
+        if (ativo && data) setNome(data.nomeFantasia ?? null);
+      })
+      .catch(() => undefined);
+    return () => {
+      ativo = false;
+    };
+  }, [empresaId]);
+  return nome;
 }
