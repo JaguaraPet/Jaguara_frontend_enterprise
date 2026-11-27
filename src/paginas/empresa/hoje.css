@@ -1,0 +1,375 @@
+/* Tela Hoje da empresa */
+.hoje {
+  gap: var(--espaco-xl);
+}
+
+.hoje__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espaco-lg);
+}
+
+.hoje__cabecalho h1 {
+  margin: 0;
+  font: var(--fonte-titulo-1);
+}
+
+.hoje__data {
+  margin: 0 0 var(--espaco-xs);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  color: var(--cor-primaria);
+}
+
+.hoje__data::first-letter {
+  text-transform: uppercase;
+}
+
+.hoje__novo {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-xl);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-primaria);
+  color: var(--cor-branco);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hoje__novo:hover {
+  background: var(--cor-primaria-escura);
+}
+
+.hoje__novo:focus-visible,
+.hoje-numero--link:focus-visible,
+.hoje-item__acao:focus-visible {
+  outline: 3px solid var(--cor-secundaria);
+  outline-offset: 2px;
+}
+
+/* Números do dia */
+.hoje__numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--espaco-lg);
+}
+
+.hoje-numero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  padding: var(--espaco-lg) var(--espaco-xl);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.hoje-numero--link:hover {
+  border-color: var(--cor-primaria);
+}
+
+.hoje-numero__valor {
+  font: var(--fonte-titulo-1);
+  color: var(--cor-texto);
+}
+
+.hoje-numero__rotulo {
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+/* Colunas */
+.hoje__colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr);
+  gap: var(--espaco-xl);
+  align-items: start;
+}
+
+.hoje__lateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xl);
+}
+
+@media (max-width: 1080px) {
+  .hoje__colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hoje-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+  padding: var(--espaco-xl);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  background: var(--cor-fundo);
+}
+
+.hoje-bloco__topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-md);
+}
+
+.hoje-bloco h2 {
+  margin: 0;
+  font: var(--fonte-titulo-2);
+}
+
+.hoje-bloco__topo a {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  color: var(--cor-secundaria);
+}
+
+.hoje__proximo {
+  margin: 0;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-suave-info);
+  font: var(--fonte-legenda);
+}
+
+.hoje-vazio {
+  margin: 0;
+  color: var(--cor-texto-secundario);
+}
+
+/* Agenda */
+.hoje-agenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hoje-item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: var(--espaco-md);
+  align-items: start;
+  padding: var(--espaco-md) 0;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.hoje-item:first-child {
+  border-top: 0;
+}
+
+.hoje-item--cancelado,
+.hoje-item--faltou {
+  opacity: 0.55;
+}
+
+.hoje-item__hora {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto);
+}
+
+.hoje-item__corpo p {
+  margin: 0;
+}
+
+.hoje-item__pet {
+  font-weight: 600;
+}
+
+.hoje-item__pet a {
+  color: var(--cor-texto);
+}
+
+.hoje-item__tutor {
+  font-weight: 400;
+  color: var(--cor-texto-secundario);
+}
+
+.hoje-item__servico {
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.hoje-item__alergia {
+  margin-top: var(--espaco-xs) !important;
+  display: inline-block;
+  padding: 2px var(--espaco-sm);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-suave-erro);
+  color: var(--cor-erro);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.hoje-item__lado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--espaco-xs);
+}
+
+.hoje-item__acao {
+  font: var(--fonte-legenda);
+  font-weight: 700;
+  color: var(--cor-primaria);
+}
+
+.hoje-situacao {
+  padding: 2px var(--espaco-sm);
+  border-radius: 999px;
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+}
+
+.hoje-situacao--feito {
+  background: var(--cor-suave-sucesso);
+  color: var(--cor-sucesso);
+}
+
+.hoje-situacao--receber,
+.hoje-situacao--aguardando {
+  background: var(--cor-suave-alerta);
+  color: var(--cor-alerta);
+}
+
+.hoje-situacao--andamento {
+  background: var(--cor-suave-info);
+  color: var(--cor-secundaria);
+}
+
+/* Pedidos */
+.hoje-pedidos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.hoje-pedido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-sm);
+  padding: var(--espaco-md) var(--espaco-lg);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-superficie);
+}
+
+.hoje-pedido__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espaco-xs) var(--espaco-md);
+}
+
+.hoje-pedido__topo span,
+.hoje-pedido__tutor {
+  margin: 0;
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.hoje-pedido__obs {
+  margin: 0;
+  font: var(--fonte-legenda);
+  font-style: italic;
+}
+
+.hoje-pedido__acoes {
+  display: flex;
+  gap: var(--espaco-sm);
+}
+
+.hoje-pedido__recusa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-sm);
+}
+
+.hoje-pedido__recusa label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-xs);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+}
+
+.hoje-pedido__recusa input {
+  min-height: var(--alvo-toque-minimo);
+  padding: 0 var(--espaco-md);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  font: var(--fonte-corpo);
+}
+
+/* Listas curtas (vacinas e cobranças) */
+.hoje-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hoje-lista li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-md);
+  padding: var(--espaco-sm) 0;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.hoje-lista li:first-child {
+  border-top: 0;
+}
+
+.hoje-lista li > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.hoje-lista__data,
+.hoje-lista__quem {
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.hoje-lista__atrasada {
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  color: var(--cor-erro);
+}
+
+.hoje-lista__valor {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.hoje-lista__whats {
+  flex-shrink: 0;
+  padding: var(--espaco-xs) var(--espaco-md);
+  border: 1px solid var(--cor-secundaria);
+  border-radius: 999px;
+  color: var(--cor-secundaria);
+  font: var(--fonte-legenda);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hoje-lista__whats:hover {
+  background: var(--cor-suave-info);
+}

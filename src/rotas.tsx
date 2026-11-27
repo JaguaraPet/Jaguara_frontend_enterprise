@@ -29,7 +29,7 @@ import { Relatorios } from './paginas/empresa/Relatorios';
 import { itensEmpresa } from './paginas/empresa/itensEmpresa';
 import { EmConstrucao } from './paginas/EmConstrucao';
 import { Entrar } from './paginas/Entrar';
-import { Painel } from './paginas/Painel';
+import { Inicio } from './paginas/empresa/Inicio';
 import { CadastroEmpresa } from './paginas/publicas/CadastroEmpresa';
 import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
 import { RecuperarSenha, RedefinirSenha } from './paginas/publicas/RecuperarSenha';
@@ -62,7 +62,7 @@ export const rotas: RouteObject[] = [
       </RotaProtegida>
     ),
     children: [
-      { index: true, element: <Painel /> },
+      { index: true, element: <Inicio /> },
       { path: 'agenda', element: <Agenda /> },
       { path: 'agenda/novo', element: <NovoAgendamento /> },
       { path: 'agenda/:agendamentoId/atendimento', element: <RegistrarAtendimento /> },
