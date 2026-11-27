@@ -32,6 +32,7 @@ import { Entrar } from './paginas/Entrar';
 import { Painel } from './paginas/Painel';
 import { CadastroEmpresa } from './paginas/publicas/CadastroEmpresa';
 import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
+import { RecuperarSenha, RedefinirSenha } from './paginas/publicas/RecuperarSenha';
 import { RotaProtegida } from './sessao/RotaProtegida';
 import { AvisosPagamento } from './tempo-real/AvisosPagamento';
 
@@ -44,6 +45,8 @@ export const rotas: RouteObject[] = [
   { path: '/cadastro', element: <CadastroEmpresa /> },
   { path: '/confirmar-email', element: <ConfirmarEmail /> },
   { path: '/primeiro-acesso', element: <PrimeiroAcesso /> },
+  { path: '/recuperar-senha', element: <RecuperarSenha /> },
+  { path: '/redefinir-senha', element: <RedefinirSenha /> },
 
   // Web Enterprise (UX-01, seção 4): empresa e funcionários.
   {
