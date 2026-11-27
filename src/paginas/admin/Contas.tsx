@@ -219,7 +219,7 @@ export function Contas() {
               </label>
               <Campo
                 rotulo="Motivo"
-                ajuda="Fica registrado na auditoria (RN34)."
+                ajuda="Fica registrado na auditoria."
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value)}
                 minLength={5}

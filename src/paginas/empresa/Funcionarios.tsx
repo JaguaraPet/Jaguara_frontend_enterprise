@@ -108,7 +108,7 @@ export function Funcionarios() {
         <Alerta
           tipo="alerta"
           titulo={`Desligar ${desligando.nome}?`}
-          mensagem="A pessoa perde o acesso na hora e as sessões abertas são encerradas (RN23)."
+          mensagem="A pessoa perde o acesso na hora e as sessões abertas são encerradas."
         />
       )}
       {desligando && (

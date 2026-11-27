@@ -152,3 +152,10 @@ a:focus-visible {
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--espaco-lg);
 }
+
+.entrar__demonstracao {
+  margin: 0;
+  text-align: center;
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}

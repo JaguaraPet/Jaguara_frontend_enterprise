@@ -134,7 +134,7 @@ export function PermissoesGlobais() {
                   </fieldset>
                 ))}
                 {marcadas.length === 0 && (
-                  <Alerta tipo="alerta" titulo="Marque ao menos uma permissão" mensagem="Um perfil sem permissão não é aceito (RN35)." />
+                  <Alerta tipo="alerta" titulo="Marque ao menos uma permissão" mensagem="Um perfil sem permissão não é aceito." />
                 )}
                 <div className="admin__acoes">
                   <Botao type="submit" carregando={salvando} disabled={!mudou}>

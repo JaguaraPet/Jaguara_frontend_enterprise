@@ -29,6 +29,15 @@ export interface Problema {
 }
 
 const CHAVE_REFRESH = 'jaguara.refreshToken';
+const CHAVE_DEMONSTRACAO = 'jaguara.demonstracao';
+
+/** Dados da demonstração em uso, para a barra "Você está numa demonstração". */
+export interface Demonstracao {
+  codigoTutor: string;
+  expiraEm: string;
+  formularioOpiniao: string | null;
+  urlTutor: string | null;
+}
 
 let accessToken: string | null = null;
 let usuario: Usuario | null = null;
@@ -71,6 +80,7 @@ function limpar() {
   usuario = null;
   try {
     localStorage.removeItem(CHAVE_REFRESH);
+    localStorage.removeItem(CHAVE_DEMONSTRACAO);
   } catch {
     // ignora
   }
@@ -123,6 +133,32 @@ export const sessao = {
     if (!resposta.ok) throw new ErroApi((await resposta.json()) as Problema);
     guardar((await resposta.json()) as Tokens);
     return usuario!;
+  },
+
+  /** Cria uma clínica de demonstração e entra nela. */
+  async entrarNaDemonstracao(): Promise<Usuario> {
+    const resposta = await postar('/demonstracao', undefined);
+    if (!resposta.ok) throw new ErroApi((await resposta.json()) as Problema);
+    const { sessao: tokens, ...demonstracao } = (await resposta.json()) as Demonstracao & {
+      sessao: Tokens;
+    };
+    try {
+      localStorage.setItem(CHAVE_DEMONSTRACAO, JSON.stringify(demonstracao));
+    } catch {
+      // sem localStorage, a barra da demonstração não aparece
+    }
+    guardar(tokens);
+    return usuario!;
+  },
+
+  /** A demonstração em uso, se a sessão for de uma. */
+  get demonstracao(): Demonstracao | null {
+    try {
+      const guardada = localStorage.getItem(CHAVE_DEMONSTRACAO);
+      return guardada ? (JSON.parse(guardada) as Demonstracao) : null;
+    } catch {
+      return null;
+    }
   },
 
   /**

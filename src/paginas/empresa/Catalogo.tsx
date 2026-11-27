@@ -290,7 +290,7 @@ export function Catalogo() {
         </form>
       )}
       {recursos.length === 0 ? (
-        <p>Nenhum recurso cadastrado. Salas, equipamentos e baias evitam dois atendimentos no mesmo lugar (RN29).</p>
+        <p>Nenhum recurso cadastrado. Salas, equipamentos e baias evitam dois atendimentos no mesmo lugar.</p>
       ) : (
         <ul className="catalogo__recursos">
           {recursos.map((r) => (
