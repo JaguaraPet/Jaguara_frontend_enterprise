@@ -208,7 +208,13 @@ export interface paths {
                         provedor: "GOOGLE" | "APPLE";
                         /** @description id_token OpenID Connect emitido pelo provedor. */
                         idToken: string;
+                        /** @description Valor aleatório gerado pelo app; o token traz ele puro (Google) ou em SHA-256 (Apple). */
                         nonce: string;
+                        /**
+                         * Format: password
+                         * @description Senha da conta do Jaguara com o mesmo e-mail, para ligar a identidade (CT-02-04).
+                         */
+                        senha?: string;
                     };
                 };
             };
@@ -223,7 +229,7 @@ export interface paths {
                     };
                 };
                 401: components["responses"]["NaoAutenticado"];
-                /** @description Já existe conta com o mesmo e-mail; o usuário confirma a senha dela para ligar a identidade. */
+                /** @description Já existe conta com o mesmo e-mail: o app pede a senha dela e repete o pedido com `senha` (IDENTIDADE_SEM_VINCULO, SENHA_INCORRETA_VINCULO). */
                 409: {
                     headers: {
                         [name: string]: unknown;
@@ -244,6 +250,15 @@ export interface paths {
                             /** Format: email */
                             email?: string;
                         };
+                    };
+                };
+                /** @description Login social sem IDs de cliente configurados (LOGIN_SOCIAL_INDISPONIVEL). */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
                     };
                 };
             };
@@ -277,13 +292,14 @@ export interface paths {
                         cadastroToken: string;
                         nome: string;
                         cpf: string;
+                        telefone?: string;
                         /** @constant */
                         aceiteTermos: true;
                     };
                 };
             };
             responses: {
-                /** @description Conta criada com o e-mail já confirmado pelo provedor e sessão aberta. */
+                /** @description Conta criada com o e-mail já confirmado pelo provedor e sessão aberta. A conta não tem senha; o tutor pode criar uma por "Esqueci minha senha". */
                 201: {
                     headers: {
                         [name: string]: unknown;
@@ -293,6 +309,15 @@ export interface paths {
                     };
                 };
                 409: components["responses"]["Conflito"];
+                /** @description Token de cadastro inválido ou vencido (30 minutos); entre com o provedor de novo. */
+                410: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problema"];
+                    };
+                };
                 422: components["responses"]["Validacao"];
             };
         };
