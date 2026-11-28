@@ -112,7 +112,16 @@ export function PerfilPet() {
       <p>
         <Link to="/pets">‹ Pets vinculados</Link>
       </p>
-      <h1>{perfil.nome}</h1>
+      <div className="pets__cabecalho">
+        {perfil.fotoUrl ? (
+          <img className="pets__foto" src={perfil.fotoUrl} alt={`Foto de ${perfil.nome}`} />
+        ) : (
+          <span className="pets__foto pets__foto--vazia" aria-hidden="true">
+            {perfil.nome.charAt(0).toUpperCase()}
+          </span>
+        )}
+        <h1>{perfil.nome}</h1>
+      </div>
       <p>
         {perfil.especie} · {perfil.raca} · {perfil.sexo === 'FEMEA' ? 'Fêmea' : 'Macho'}
         {perfil.idade !== undefined ? ` · ${perfil.idade} ${perfil.idade === 1 ? 'ano' : 'anos'}` : ''}

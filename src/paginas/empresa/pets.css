@@ -92,3 +92,27 @@
   color: var(--cor-texto-secundario);
   font-variant-numeric: tabular-nums;
 }
+
+.pets__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-md);
+}
+
+.pets__foto {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.pets__foto--vazia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cor-suave-alerta);
+  color: var(--cor-primaria);
+  font-weight: 700;
+  font-size: 1.75rem;
+}
