@@ -60,6 +60,7 @@ describe('UC-38 · Catálogo na web', () => {
     entrar();
     const pedidos = servidor();
     render(<Catalogo />);
+    await userEvent.click(await screen.findByRole('button', { name: '+ Novo serviço' }));
     expect(await screen.findByText('Nenhum serviço no catálogo')).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText('Nome'), 'Banho');
     await userEvent.selectOptions(screen.getByLabelText('Categoria'), 'BANHO_TOSA');
@@ -86,6 +87,7 @@ describe('UC-38 · Catálogo na web', () => {
     entrar();
     servidor();
     render(<Catalogo />);
+    await userEvent.click(await screen.findByRole('button', { name: '+ Novo serviço' }));
     await screen.findByText('Nenhum serviço no catálogo');
     await userEvent.type(screen.getByLabelText('Nome'), 'Banho');
     await userEvent.type(screen.getByLabelText('Preço (R$)'), '60');

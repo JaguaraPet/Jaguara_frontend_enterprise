@@ -110,3 +110,16 @@
     min-height: auto;
   }
 }
+
+.agenda__item--nao_compareceu {
+  border-left-color: var(--cor-erro);
+  background: var(--cor-suave-erro);
+}
+
+.agenda__item--agendado {
+  border-left-color: var(--cor-primaria);
+}
+
+.agenda__item {
+  box-shadow: 0 1px 2px rgb(30 27 24 / 6%);
+}

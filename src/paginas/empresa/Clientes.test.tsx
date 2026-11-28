@@ -57,6 +57,7 @@ describe('UC-21 · Clientes na web', () => {
       return json(novo, 201);
     });
     render(<Clientes />);
+    await userEvent.click(await screen.findByRole('button', { name: '+ Novo cliente' }));
     await screen.findByText('Nenhum cliente cadastrado');
     await userEvent.type(screen.getByLabelText('Nome'), 'Carla Souza');
     await userEvent.type(screen.getByLabelText('E-mail'), 'carla@exemplo.com');
@@ -89,6 +90,7 @@ describe('UC-21 · Clientes na web', () => {
     ];
     servidor(clientes, () => json({ ...clientes[0], id: 'c3', nome: 'Eva' }, 201));
     render(<Clientes />);
+    await userEvent.click(await screen.findByRole('button', { name: '+ Novo cliente' }));
     const linha = (await screen.findByText('Davi')).closest('tr')!;
     expect(within(linha).getByText('Aguardando o aceite')).toBeInTheDocument();
     expect(within(linha).getByRole('button', { name: 'Cadastrar pet de Davi' })).toBeDisabled();

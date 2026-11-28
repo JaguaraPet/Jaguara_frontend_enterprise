@@ -36,6 +36,7 @@ export function Clientes() {
   const [pet, setPet] = useState({ nome: '', racaId: '', sexo: 'MACHO' as 'MACHO' | 'FEMEA', castrado: false });
   const [revogando, setRevogando] = useState<Cliente | null>(null);
   const [versao, setVersao] = useState(0);
+  const [novo, setNovo] = useState(false);
 
   useEffect(() => {
     if (!empresaId) return;
@@ -73,6 +74,7 @@ export function Clientes() {
       setAviso({ tipo: 'erro', titulo: 'Cliente não cadastrado', mensagem: mensagemDoErro(error) });
       return;
     }
+    setNovo(false);
     setAviso(
       data?.consentimento === 'VIGENTE'
         ? { tipo: 'sucesso', titulo: `${data.nome} cadastrado`, mensagem: 'O consentimento está vigente.' }
@@ -119,7 +121,13 @@ export function Clientes() {
 
   return (
     <div className="pagina">
-      <h1>Clientes</h1>
+      <div className="pagina__cabecalho">
+        <div>
+          <h1>Clientes</h1>
+          <p className="pagina__descricao">Tutores atendidos pela empresa, com e sem o app.</p>
+        </div>
+        {podeEditar && !novo && <Botao onClick={() => setNovo(true)}>+ Novo cliente</Botao>}
+      </div>
       {aviso && <Alerta tipo={aviso.tipo} titulo={aviso.titulo} mensagem={aviso.mensagem} />}
       {revogando && (
         <>
@@ -137,7 +145,7 @@ export function Clientes() {
         </>
       )}
 
-      {podeEditar && (
+      {podeEditar && novo && (
         <Cartao titulo="Novo cliente" subtitulo="O cliente precisa consentir com o termo da empresa.">
           <form className="admin__formulario" onSubmit={cadastrar} aria-label="Novo cliente">
             <Campo rotulo="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />

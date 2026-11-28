@@ -52,6 +52,7 @@ export function Catalogo() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
   const [form, setForm] = useState(VAZIO);
   const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [novo, setNovo] = useState(false);
   const [nomeRecurso, setNomeRecurso] = useState('');
   const [tipoRecurso, setTipoRecurso] = useState<TipoRecurso>('SALA');
   const [salvando, setSalvando] = useState(false);
@@ -77,6 +78,7 @@ export function Catalogo() {
   }, [empresaId, versao]);
 
   function editar(s: Servico) {
+    setNovo(true);
     setEditandoId(s.id ?? null);
     setForm({
       nome: s.nome,
@@ -89,6 +91,7 @@ export function Catalogo() {
   }
 
   function cancelar() {
+    setNovo(false);
     setEditandoId(null);
     setForm(VAZIO);
   }
@@ -168,10 +171,16 @@ export function Catalogo() {
 
   return (
     <div className="pagina">
-      <h1>Catálogo</h1>
+      <div className="pagina__cabecalho">
+        <div>
+          <h1>Serviços</h1>
+          <p className="pagina__descricao">O que a empresa oferece, com preço e duração, e as salas e equipamentos.</p>
+        </div>
+        {editaServico && !novo && <Botao onClick={() => setNovo(true)}>+ Novo serviço</Botao>}
+      </div>
       {aviso && <Alerta tipo={aviso.tipo} titulo={aviso.titulo} mensagem={aviso.mensagem} />}
 
-      {editaServico && (
+      {editaServico && (novo || editandoId) && (
         <Cartao titulo={editandoId ? 'Alterar serviço' : 'Novo serviço'}>
           <form className="catalogo__formulario" onSubmit={salvarServico} aria-label="Serviço">
             <Campo rotulo="Nome" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />

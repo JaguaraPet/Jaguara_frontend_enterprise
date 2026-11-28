@@ -159,3 +159,40 @@ a:focus-visible {
   font: var(--fonte-legenda);
   color: var(--cor-texto-secundario);
 }
+
+/* Cabeçalho de página com título à esquerda e a ação principal à direita */
+.pagina__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espaco-lg);
+}
+
+.pagina__cabecalho h1 {
+  margin: 0;
+}
+
+.pagina h1 {
+  font: var(--fonte-titulo-1);
+  letter-spacing: -0.01em;
+}
+
+/* Login: lado da marca e lado do formulário */
+.entrar {
+  background:
+    radial-gradient(900px 420px at 0% 0%, rgb(31 92 74 / 16%), transparent 60%),
+    radial-gradient(700px 380px at 100% 100%, rgb(138 75 15 / 14%), transparent 60%),
+    var(--cor-superficie);
+}
+
+.entrar__cartao {
+  max-width: 420px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-borda);
+  box-shadow: 0 20px 48px rgb(30 27 24 / 10%);
+}
+
+.entrar__marca::before {
+  content: '🐾 ';
+}
