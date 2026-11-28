@@ -1,0 +1,16 @@
+.clientes__anexar {
+  position: relative;
+  cursor: pointer;
+}
+
+.clientes__anexar input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.clientes__anexar:focus-within {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
