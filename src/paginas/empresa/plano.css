@@ -1,0 +1,81 @@
+.plano__atual {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espaco-lg);
+  padding: var(--espaco-lg);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-fundo);
+}
+
+.plano__atual h2 {
+  margin: 0;
+}
+
+.plano__rotulo {
+  margin: 0;
+  color: var(--cor-secundaria);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.plano__uso {
+  display: grid;
+  gap: var(--espaco-xs);
+  min-width: 220px;
+  align-content: center;
+}
+
+.plano__barra {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--cor-desabilitado);
+  overflow: hidden;
+}
+
+.plano__barra span {
+  display: block;
+  height: 100%;
+  background: var(--cor-primaria);
+}
+
+.plano__opcoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-md);
+}
+
+.plano__opcao {
+  display: grid;
+  gap: var(--espaco-sm);
+  align-content: start;
+  padding: var(--espaco-lg);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  background: var(--cor-fundo);
+}
+
+.plano__opcao--atual {
+  border: 2px solid var(--cor-secundaria);
+}
+
+.plano__opcao h3,
+.plano__opcao p {
+  margin: 0;
+}
+
+.plano__preco {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.plano__preco span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--cor-texto-secundario);
+}
