@@ -65,4 +65,17 @@ describe('Tela de login da web (UC-02)', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Tutores usam o app');
     expect(sair).toHaveBeenCalled();
   });
+
+  it('deve pedir o código do aplicativo quando a conta tem a verificação em duas etapas', async () => {
+    const entrar = vi
+      .spyOn(sessao, 'entrar')
+      .mockRejectedValueOnce(new ErroApi({ codigo: 'DOIS_FATORES_NECESSARIO' }))
+      .mockResolvedValueOnce(usuario('FUNCIONARIO'));
+    abrir();
+    await preencherEEntrar();
+    await userEvent.type(await screen.findByLabelText('Código do aplicativo'), '123456');
+    await userEvent.click(screen.getByRole('button', { name: 'Confirmar código' }));
+    expect(await screen.findByText('Painel aberto')).toBeInTheDocument();
+    expect(entrar).toHaveBeenLastCalledWith('clinica@exemplo.com', 'Senha@123', '123456');
+  });
 });

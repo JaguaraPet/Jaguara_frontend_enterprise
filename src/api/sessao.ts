@@ -128,8 +128,8 @@ export const sessao = {
   },
 
   /** UC-02: entra com e-mail e senha. */
-  async entrar(email: string, senha: string): Promise<Usuario> {
-    const resposta = await postar('/auth/login', { email, senha });
+  async entrar(email: string, senha: string, codigo?: string): Promise<Usuario> {
+    const resposta = await postar('/auth/login', { email, senha, ...(codigo ? { codigo } : {}) });
     if (!resposta.ok) throw new ErroApi((await resposta.json()) as Problema);
     guardar((await resposta.json()) as Tokens);
     return usuario!;

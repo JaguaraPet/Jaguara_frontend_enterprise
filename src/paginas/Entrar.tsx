@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { api } from '../api/cliente';
 import { ErroApi, sessao } from '../api/sessao';
 import type { TipoUsuario } from '../api/sessao';
 import { Alerta, Botao, Campo } from '../componentes';
@@ -27,6 +28,8 @@ function mensagemDoErro(erro: unknown): string {
         return 'Esta conta não está ativa. Fale com o administrador da empresa.';
       case 'DADOS_INVALIDOS':
         return 'Confira o e-mail e a senha.';
+      case 'CODIGO_DOIS_FATORES_INVALIDO':
+        return 'Código incorreto ou vencido. Digite o que aparece agora no aplicativo, ou um código de recuperação.';
     }
   }
   return 'Não foi possível entrar agora. Tente de novo em instantes.';
@@ -38,6 +41,8 @@ export function Entrar({ tipos, titulo, destino, rodape = true }: Props) {
   const local = useLocation();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [pedeCodigo, setPedeCodigo] = useState(false);
+  const [codigo, setCodigo] = useState('');
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
@@ -46,7 +51,7 @@ export function Entrar({ tipos, titulo, destino, rodape = true }: Props) {
     setErro(null);
     setEnviando(true);
     try {
-      const usuario = await sessao.entrar(email, senha);
+      const usuario = await sessao.entrar(email, senha, pedeCodigo ? codigo : undefined);
       if (!tipos.includes(usuario.tipo)) {
         await sessao.sair();
         setErro(
@@ -57,8 +62,20 @@ export function Entrar({ tipos, titulo, destino, rodape = true }: Props) {
         return;
       }
       const voltarPara = (local.state as { voltarPara?: string } | null)?.voltarPara;
+      // Conta da empresa obrigada à segunda etapa e ainda sem ela: primeiro a segurança.
+      if (usuario.tipo === 'EMPRESA') {
+        const { data } = await api.GET('/conta/dois-fatores').catch(() => ({ data: undefined }));
+        if (data?.exigido && !data.ativo) {
+          void navegar('/seguranca?obrigatorio=1', { replace: true });
+          return;
+        }
+      }
       void navegar(voltarPara ?? destino, { replace: true });
     } catch (falha) {
+      if (falha instanceof ErroApi && falha.problema.codigo === 'DOIS_FATORES_NECESSARIO') {
+        setPedeCodigo(true);
+        return;
+      }
       setErro(mensagemDoErro(falha));
     } finally {
       setEnviando(false);
@@ -87,8 +104,25 @@ export function Entrar({ tipos, titulo, destino, rodape = true }: Props) {
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
         />
+        {pedeCodigo && (
+          <>
+            <Alerta
+              tipo="info"
+              titulo="Verificação em duas etapas"
+              mensagem="Abra o aplicativo autenticador e digite o código de 6 números do Jaguara. Sem o celular, use um código de recuperação."
+            />
+            <Campo
+              rotulo="Código do aplicativo"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              autoFocus
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+            />
+          </>
+        )}
         <Botao type="submit" larguraTotal carregando={enviando}>
-          Entrar
+          {pedeCodigo ? 'Confirmar código' : 'Entrar'}
         </Botao>
         {rodape && (
           <div className="entrar__links">
