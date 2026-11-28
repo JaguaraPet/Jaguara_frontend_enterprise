@@ -104,3 +104,16 @@
   white-space: pre-wrap;
   margin: 0 0 var(--espaco-md);
 }
+
+.admin__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espaco-md);
+}
+
+.admin__lista > li {
+  padding-bottom: var(--espaco-md);
+  border-bottom: 1px solid var(--cor-borda);
+}

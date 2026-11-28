@@ -1,3 +1,4 @@
+import { AvisosDaConta } from './AvisosDaConta';
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router';
@@ -205,6 +206,7 @@ export function Hoje() {
         </Link>
       </header>
 
+      <AvisosDaConta empresaId={empresaId ?? ''} podeVer={usuario?.permissoes.includes('empresa:editar') ?? false} />
       {aviso && <Alerta tipo="sucesso" titulo={aviso} />}
 
       <section className="hoje__numeros" aria-label="Números do dia">
