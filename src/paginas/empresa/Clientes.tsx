@@ -7,6 +7,7 @@ import { mensagemDoErro } from '../admin/erros';
 import { useUsuario } from '../../sessao/useUsuario';
 import '../admin/admin.css';
 import '../admin/logs.css';
+import './clientes.css';
 
 type Cliente = components['schemas']['Cliente'];
 type Especie = components['schemas']['Especie'];
@@ -19,7 +20,17 @@ const CONSENTIMENTO: Record<string, string> = {
   REVOGADO: 'Revogado',
 };
 
-const VAZIO = { nome: '', cpf: '', telefone: '', email: '', observacoes: '', evidencia: '' };
+const VAZIO = { nome: '', cpf: '', telefone: '', email: '', observacoes: '' };
+
+/** Envia o arquivo direto ao armazenamento pela URL assinada; devolve se deu certo. */
+async function enviarArquivo(url: string, arquivo: File): Promise<boolean> {
+  try {
+    const r = await fetch(url, { method: 'PUT', body: arquivo, headers: { 'Content-Type': arquivo.type || 'application/octet-stream' } });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
 
 /** Clientes da empresa com o consentimento do termo (UC-21, RN41, ADR-010). */
 export function Clientes() {
@@ -37,6 +48,7 @@ export function Clientes() {
   const [revogando, setRevogando] = useState<Cliente | null>(null);
   const [versao, setVersao] = useState(0);
   const [novo, setNovo] = useState(false);
+  const [termo, setTermo] = useState<File | null>(null);
 
   useEffect(() => {
     if (!empresaId) return;
@@ -56,6 +68,10 @@ export function Clientes() {
 
   async function cadastrar(evento: FormEvent) {
     evento.preventDefault();
+    if (meio === 'ASSINATURA_PRESENCIAL' && !termo) {
+      setAviso({ tipo: 'erro', titulo: 'Anexe o termo assinado', mensagem: 'Escolha o PDF ou a foto do termo que o cliente assinou.' });
+      return;
+    }
     setSalvando(true);
     const { data, error } = await api.POST('/empresas/{empresaId}/clientes', {
       params: { path: { empresaId } },
@@ -66,15 +82,31 @@ export function Clientes() {
         ...(form.telefone ? { telefone: form.telefone } : {}),
         ...(form.email ? { email: form.email } : {}),
         ...(form.observacoes ? { observacoes: form.observacoes } : {}),
-        ...(meio === 'ASSINATURA_PRESENCIAL' ? { evidenciaArquivoUrl: form.evidencia } : {}),
+        ...(meio === 'ASSINATURA_PRESENCIAL' && termo
+          ? { evidenciaArquivo: { nomeArquivo: termo.name, tamanhoBytes: Math.max(1, termo.size) } }
+          : {}),
       },
     });
+    if (!error && data?.urlEnvioTermo && termo && !(await enviarArquivo(data.urlEnvioTermo, termo))) {
+      setSalvando(false);
+      setAviso({
+        tipo: 'alerta',
+        titulo: `${data.nome} cadastrado, mas o termo não foi enviado`,
+        mensagem: 'Use "Anexar termo" na lista para enviar a cópia de novo.',
+      });
+      setNovo(false);
+      setForm(VAZIO);
+      setTermo(null);
+      setVersao((v) => v + 1);
+      return;
+    }
     setSalvando(false);
     if (error) {
       setAviso({ tipo: 'erro', titulo: 'Cliente não cadastrado', mensagem: mensagemDoErro(error) });
       return;
     }
     setNovo(false);
+    setTermo(null);
     setAviso(
       data?.consentimento === 'VIGENTE'
         ? { tipo: 'sucesso', titulo: `${data.nome} cadastrado`, mensagem: 'O consentimento está vigente.' }
@@ -103,6 +135,35 @@ export function Clientes() {
     setAviso({ tipo: 'sucesso', titulo: `${pet.nome} cadastrado para ${petDe.nome}` });
     setPetDe(null);
     setPet({ nome: '', racaId: '', sexo: 'MACHO', castrado: false });
+  }
+
+  async function verTermo(c: Cliente) {
+    const { data, error } = await api.GET('/empresas/{empresaId}/clientes/{clienteId}/consentimento/termo', {
+      params: { path: { empresaId, clienteId: c.id! } },
+    });
+    if (error || !data) {
+      setAviso({ tipo: 'erro', titulo: 'Não foi possível abrir o termo', mensagem: mensagemDoErro(error) });
+      return;
+    }
+    window.open(data.url, '_blank', 'noopener');
+  }
+
+  async function anexarTermo(c: Cliente, arquivo: File) {
+    const { data, error } = await api.POST('/empresas/{empresaId}/clientes/{clienteId}/consentimento/termo', {
+      params: { path: { empresaId, clienteId: c.id! } },
+      body: { nomeArquivo: arquivo.name, tamanhoBytes: Math.max(1, arquivo.size) },
+    });
+    if (error || !data) {
+      setAviso({ tipo: 'erro', titulo: 'Termo não anexado', mensagem: mensagemDoErro(error) });
+      return;
+    }
+    const ok = await enviarArquivo(data.urlEnvio, arquivo);
+    setAviso(
+      ok
+        ? { tipo: 'sucesso', titulo: `Termo de ${c.nome} anexado` }
+        : { tipo: 'erro', titulo: 'Termo não enviado', mensagem: 'Confira a conexão e tente de novo.' },
+    );
+    setVersao((v) => v + 1);
   }
 
   async function revogar() {
@@ -169,14 +230,14 @@ export function Clientes() {
               </label>
             </fieldset>
             {meio === 'ASSINATURA_PRESENCIAL' && (
-              <Campo
-                rotulo="Link da cópia digitalizada do termo assinado"
-                type="url"
-                placeholder="https://"
-                value={form.evidencia}
-                onChange={(e) => setForm({ ...form, evidencia: e.target.value })}
-                required
-              />
+              <label className="admin__selecao">
+                Termo assinado (PDF ou foto, até 10 MB)
+                <input
+                  type="file"
+                  accept="application/pdf,image/*"
+                  onChange={(e) => setTermo(e.target.files?.[0] ?? null)}
+                />
+              </label>
             )}
             <Botao type="submit" carregando={salvando}>
               Cadastrar cliente
@@ -271,6 +332,28 @@ export function Clientes() {
                         >
                           Cadastrar pet
                         </Botao>
+                      )}
+                      {c.possuiTermoAnexado ? (
+                        <Botao variante="texto" aria-label={`Ver o termo assinado de ${c.nome}`} onClick={() => void verTermo(c)}>
+                          Ver termo
+                        </Botao>
+                      ) : (
+                        c.ativo &&
+                        c.consentimento === 'VIGENTE' &&
+                        !c.possuiConta && (
+                          <label className="botao botao--texto clientes__anexar">
+                            Anexar termo
+                            <input
+                              type="file"
+                              accept="application/pdf,image/*"
+                              aria-label={`Anexar o termo assinado de ${c.nome}`}
+                              onChange={(e) => {
+                                const arquivo = e.target.files?.[0];
+                                if (arquivo) void anexarTermo(c, arquivo);
+                              }}
+                            />
+                          </label>
+                        )
                       )}
                       {c.ativo && c.consentimento === 'VIGENTE' && (
                         <Botao variante="texto" aria-label={`Registrar revogação de ${c.nome}`} onClick={() => setRevogando(c)}>

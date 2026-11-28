@@ -18,7 +18,12 @@ function servidor(clientes: Record<string, unknown>[], post: (corpo: Record<stri
   const enviados: { caminho: string; corpo: unknown }[] = [];
   vi.stubGlobal(
     'fetch',
-    vi.fn(async (entrada: Request) => {
+    vi.fn(async (entrada: Request | string) => {
+      // Envio do arquivo direto ao armazenamento (URL assinada).
+      if (typeof entrada === 'string') {
+        enviados.push({ caminho: `PUT ${entrada}`, corpo: null });
+        return new Response(null, { status: 200 });
+      }
       const caminho = new URL(entrada.url).pathname.replace('/v1', '');
       if (entrada.method === 'GET') return json(caminho === '/especies' ? especies : clientes);
       const texto = await entrada.text();
@@ -52,9 +57,9 @@ describe('UC-21 · Clientes na web', () => {
     const clientes: Record<string, unknown>[] = [];
     const enviados = servidor(clientes, (corpo, caminho) => {
       if (caminho.endsWith('/pets')) return json({ id: 'p1', nome: corpo.nome }, 201);
-      const novo = { id: 'c1', codigo: 'CLI-001', nome: corpo.nome, email: corpo.email, possuiConta: false, ativo: true, consentimento: 'VIGENTE' };
+      const novo = { id: 'c1', codigo: 'CLI-001', nome: corpo.nome, email: corpo.email, possuiConta: false, ativo: true, consentimento: 'VIGENTE', possuiTermoAnexado: true };
       clientes.push(novo);
-      return json(novo, 201);
+      return json({ ...novo, urlEnvioTermo: 'https://s3/termo' }, 201);
     });
     render(<Clientes />);
     await userEvent.click(await screen.findByRole('button', { name: '+ Novo cliente' }));
@@ -62,22 +67,27 @@ describe('UC-21 · Clientes na web', () => {
     await userEvent.type(screen.getByLabelText('Nome'), 'Carla Souza');
     await userEvent.type(screen.getByLabelText('E-mail'), 'carla@exemplo.com');
     await userEvent.click(screen.getByLabelText('O cliente assinou o termo no balcão'));
-    await userEvent.type(screen.getByLabelText('Link da cópia digitalizada do termo assinado'), 'https://drive.exemplo.com/termo.pdf');
+    await userEvent.upload(
+      screen.getByLabelText('Termo assinado (PDF ou foto, até 10 MB)'),
+      new File(['%PDF'], 'termo.pdf', { type: 'application/pdf' }),
+    );
     await userEvent.click(screen.getByRole('button', { name: 'Cadastrar cliente' }));
     expect(await screen.findByText('Carla Souza cadastrado')).toBeInTheDocument();
     expect(enviados[0].corpo).toEqual({
       nome: 'Carla Souza',
       email: 'carla@exemplo.com',
       meioConsentimento: 'ASSINATURA_PRESENCIAL',
-      evidenciaArquivoUrl: 'https://drive.exemplo.com/termo.pdf',
+      evidenciaArquivo: { nomeArquivo: 'termo.pdf', tamanhoBytes: 4 },
     });
+    expect(enviados[1].caminho).toBe('PUT https://s3/termo');
+    expect(await screen.findByRole('button', { name: 'Ver o termo assinado de Carla Souza' })).toBeInTheDocument();
 
     await userEvent.click(await screen.findByRole('button', { name: 'Cadastrar pet de Carla Souza' }));
     await userEvent.type(screen.getByLabelText('Nome do pet'), 'Bolt');
     await userEvent.selectOptions(screen.getByLabelText('Raça'), 'srd');
     await userEvent.click(screen.getByRole('button', { name: 'Cadastrar pet' }));
     expect(await screen.findByText('Bolt cadastrado para Carla Souza')).toBeInTheDocument();
-    expect(enviados[1]).toEqual({
+    expect(enviados[2]).toEqual({
       caminho: '/empresas/e1/clientes/c1/pets',
       corpo: { nome: 'Bolt', racaId: 'srd', sexo: 'MACHO', castrado: false },
     });
