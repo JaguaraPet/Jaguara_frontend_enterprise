@@ -6,6 +6,7 @@ import { Alerta, Botao, Campo } from '../../componentes';
 import '../admin/admin.css';
 import '../admin/logs.css';
 import './indicadores.css';
+import { RecebimentoDireto } from './RecebimentoDireto';
 
 type Pagamento = components['schemas']['PagamentoDetalhado'];
 type Status = '' | 'ACEITO' | 'PENDENTE' | 'RECUSADO' | 'CANCELADO';
@@ -83,6 +84,7 @@ export function Pagamentos() {
   return (
     <div className="pagina">
       <h1>Pagamentos</h1>
+      <RecebimentoDireto />
       <form className="indicadores__filtros" onSubmit={aplicar} aria-label="Filtrar pagamentos">
         <label className="admin__selecao">
           Situação
