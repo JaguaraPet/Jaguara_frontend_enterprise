@@ -10,6 +10,7 @@ export const itensEmpresa: (ItemMenu & { descricao: string })[] = [
   { grupo: 'Operação', rotulo: 'Pedidos', caminho: '/solicitacoes', permissao: 'agenda:editar', descricao: 'Pedidos de agendamento dos tutores' },
   { grupo: 'Clientes', rotulo: 'Clientes', caminho: '/clientes', permissao: 'cliente:ler', descricao: 'Tutores, pets e termos de consentimento' },
   { grupo: 'Clientes', rotulo: 'Pets', caminho: '/pets', permissao: 'cliente:ler', descricao: 'Pets compartilhados com a clínica' },
+  { grupo: 'Clientes', rotulo: 'Avaliações', caminho: '/avaliacoes', permissao: 'atendimento:ler', descricao: 'Notas e comentários dos tutores' },
   { grupo: 'Clientes', rotulo: 'Conversas', caminho: '/chat', permissao: 'chat:usar', descricao: 'Mensagens com os tutores' },
   { grupo: 'Gestão', rotulo: 'Serviços', caminho: '/catalogo', permissao: 'servico:ler', descricao: 'Serviços, preços e salas' },
   { grupo: 'Gestão', rotulo: 'Horários', caminho: '/horarios', permissao: 'agenda:ler', descricao: 'Horário de cada profissional e sala' },

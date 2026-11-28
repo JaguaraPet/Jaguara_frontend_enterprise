@@ -22,6 +22,7 @@ import { NovoAgendamento } from './paginas/empresa/NovoAgendamento';
 import { Pagamentos } from './paginas/empresa/Pagamentos';
 import { Perfis } from './paginas/empresa/Perfis';
 import { PerfilEmpresa } from './paginas/empresa/PerfilEmpresa';
+import { Avaliacoes } from './paginas/empresa/Avaliacoes';
 import { Privacidade } from './paginas/empresa/Privacidade';
 import { Solicitacoes } from './paginas/empresa/Solicitacoes';
 import { PerfilPet } from './paginas/empresa/PerfilPet';
@@ -83,9 +84,10 @@ export const rotas: RouteObject[] = [
       { path: 'relatorios', element: <Relatorios /> },
       { path: 'pagamentos', element: <Pagamentos /> },
       { path: 'perfil-empresa', element: <PerfilEmpresa /> },
+      { path: 'avaliacoes', element: <Avaliacoes /> },
       { path: 'privacidade', element: <Privacidade /> },
       ...itensEmpresa
-        .filter((item) => !['/', '/agenda', '/horarios', '/solicitacoes', '/catalogo', '/funcionarios', '/perfis', '/clientes', '/chat', '/pets', '/indicadores', '/relatorios', '/pagamentos', '/privacidade'].includes(item.caminho))
+        .filter((item) => !['/', '/agenda', '/horarios', '/solicitacoes', '/catalogo', '/funcionarios', '/perfis', '/clientes', '/chat', '/pets', '/indicadores', '/relatorios', '/pagamentos', '/privacidade', '/avaliacoes'].includes(item.caminho))
         .map((item) => ({ path: item.caminho.slice(1), element: <EmConstrucao titulo={item.rotulo} /> })),
     ],
   },

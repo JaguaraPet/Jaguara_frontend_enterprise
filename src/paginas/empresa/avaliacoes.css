@@ -1,0 +1,120 @@
+.estrelas {
+  color: #c98a12;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.estrelas--grande {
+  font-size: 1.5rem;
+}
+
+.estrelas__vazias {
+  color: var(--cor-borda);
+}
+
+.avaliacoes__resumo .cartao__conteudo,
+.avaliacoes__resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xl);
+  align-items: center;
+}
+
+.avaliacoes__media {
+  display: grid;
+  justify-items: center;
+  gap: var(--espaco-xs);
+  min-width: 140px;
+}
+
+.avaliacoes__media strong {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.avaliacoes__media span:last-child {
+  color: var(--cor-texto-secundario);
+}
+
+.avaliacoes__barras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espaco-xs);
+  flex: 1;
+  min-width: 220px;
+}
+
+.avaliacoes__barras li {
+  display: grid;
+  grid-template-columns: 3rem 1fr 2rem;
+  gap: var(--espaco-sm);
+  align-items: center;
+}
+
+.avaliacoes__barra {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--cor-desabilitado);
+  overflow: hidden;
+}
+
+.avaliacoes__barra span {
+  display: block;
+  height: 100%;
+  background: #c98a12;
+}
+
+.avaliacoes__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espaco-md);
+}
+
+.avaliacoes__item {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+  padding: var(--espaco-lg);
+  display: grid;
+  gap: var(--espaco-sm);
+  background: var(--cor-fundo);
+}
+
+.avaliacoes__item p {
+  margin: 0;
+}
+
+.avaliacoes__linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  align-items: center;
+}
+
+.avaliacoes__meta {
+  color: var(--cor-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.avaliacoes__resposta {
+  border-left: 3px solid var(--cor-secundaria);
+  padding-left: var(--espaco-md);
+  color: var(--cor-texto-secundario);
+}
+
+.avaliacoes__item > .botao {
+  justify-self: start;
+}
+
+.avaliacoes__responder {
+  display: grid;
+  gap: var(--espaco-sm);
+}
+
+.avaliacoes__acoes {
+  display: flex;
+  gap: var(--espaco-sm);
+}
