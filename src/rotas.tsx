@@ -36,6 +36,7 @@ import { Demonstracao } from './paginas/publicas/Demonstracao';
 import { ConfirmarEmail, PrimeiroAcesso } from './paginas/publicas/ConfirmarEmail';
 import { RecuperarSenha, RedefinirSenha } from './paginas/publicas/RecuperarSenha';
 import { RotaProtegida } from './sessao/RotaProtegida';
+import { rotasDoSite } from './site/rotasSite';
 import { AvisosPagamento } from './tempo-real/AvisosPagamento';
 
 export const rotas: RouteObject[] = [
@@ -121,6 +122,9 @@ export const rotas: RouteObject[] = [
         })),
     ],
   },
+
+  // Páginas públicas também na Enterprise: /site (em desenvolvimento) e /e/{endereço}.
+  ...rotasDoSite('/site'),
 
   // Catálogo dos componentes, só em desenvolvimento.
   ...(import.meta.env.DEV ? [{ path: '/componentes', element: <Componentes /> }] : []),
