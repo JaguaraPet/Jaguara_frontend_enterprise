@@ -53,3 +53,55 @@
 .agenda__acao {
   font: var(--fonte-legenda);
 }
+
+.atendimento__saude {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+  margin: 0;
+  padding: var(--espaco-lg) var(--espaco-xl);
+  border: 1px solid var(--cor-secundaria);
+  border-radius: 12px;
+  background: var(--cor-suave-info);
+}
+
+.atendimento__saude legend {
+  padding: 0 var(--espaco-sm);
+  font-weight: 700;
+  color: var(--cor-secundaria);
+}
+
+.atendimento__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--espaco-md);
+}
+
+.atendimento__atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+}
+
+.atendimento__atalhos button {
+  min-height: 36px;
+  padding: 0 var(--espaco-lg);
+  border: 1px solid var(--cor-secundaria);
+  border-radius: 999px;
+  background: var(--cor-fundo);
+  color: var(--cor-secundaria);
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.atendimento__atalhos button:focus-visible {
+  outline: 3px solid var(--cor-secundaria);
+  outline-offset: 2px;
+}
+
+.atendimento__nota {
+  margin: 0;
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}

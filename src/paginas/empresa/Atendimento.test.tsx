@@ -30,6 +30,24 @@ function abrir() {
   );
 }
 
+/** Banho de pet sem a carteira liberada para a clínica: o atendimento vale só a cobrança. */
+const detalhe = {
+  id: 'ag1',
+  dataHoraInicio: '2026-11-20T12:00:00Z',
+  dataHoraFim: '2026-11-20T13:00:00Z',
+  status: 'AGENDADO',
+  servicoId: 's1',
+  servicoNome: 'Banho',
+  categoria: 'BANHO_TOSA',
+  petId: 'p1',
+  petNome: 'Thor',
+  alergias: [],
+  tutorNome: 'Ana',
+  profissionalNome: null,
+  empresaNome: 'Pet Shop',
+  podeRegistrarSaude: false,
+};
+
 describe('UC-23 · Registrar atendimento na web', () => {
   afterEach(() => {
     cleanup();
@@ -55,6 +73,7 @@ describe('UC-23 · Registrar atendimento na web', () => {
       vi.fn(async (entrada: Request) => {
         const caminho = new URL(entrada.url).pathname;
         if (caminho.endsWith('/servicos')) return json(servicos);
+        if (/\/agendamentos\/[^/]+$/.test(caminho)) return json(detalhe);
         if (entrada.method === 'POST') {
           enviado = JSON.parse(await entrada.text());
           return json(
@@ -108,6 +127,7 @@ describe('UC-23 · Registrar atendimento na web', () => {
       vi.fn(async (entrada: Request) => {
         const caminho = new URL(entrada.url).pathname;
         if (caminho.endsWith('/servicos')) return json(servicos);
+        if (/\/agendamentos\/[^/]+$/.test(caminho)) return json(detalhe);
         if (entrada.method === 'PATCH') {
           enviado = JSON.parse(await entrada.text());
           return json({ ...atendimento, procedimentosRealizados: 'Banho e tosa' });
