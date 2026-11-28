@@ -21,6 +21,7 @@ import { Indicadores } from './paginas/empresa/Indicadores';
 import { NovoAgendamento } from './paginas/empresa/NovoAgendamento';
 import { Pagamentos } from './paginas/empresa/Pagamentos';
 import { Perfis } from './paginas/empresa/Perfis';
+import { PerfilEmpresa } from './paginas/empresa/PerfilEmpresa';
 import { Privacidade } from './paginas/empresa/Privacidade';
 import { Solicitacoes } from './paginas/empresa/Solicitacoes';
 import { PerfilPet } from './paginas/empresa/PerfilPet';
@@ -80,6 +81,7 @@ export const rotas: RouteObject[] = [
       { path: 'indicadores', element: <Indicadores /> },
       { path: 'relatorios', element: <Relatorios /> },
       { path: 'pagamentos', element: <Pagamentos /> },
+      { path: 'perfil-empresa', element: <PerfilEmpresa /> },
       { path: 'privacidade', element: <Privacidade /> },
       ...itensEmpresa
         .filter((item) => !['/', '/agenda', '/horarios', '/solicitacoes', '/catalogo', '/funcionarios', '/perfis', '/clientes', '/chat', '/pets', '/indicadores', '/relatorios', '/pagamentos', '/privacidade'].includes(item.caminho))

@@ -51,7 +51,7 @@ describe('Web Enterprise: painel e menu por perfil (RN20)', () => {
       tipo: 'EMPRESA',
       perfil: 'Empresa',
       empresaId: 'e1',
-      permissoes: ['agenda:ler', 'agenda:editar', 'servico:ler', 'cliente:ler', 'chat:usar', 'funcionario:ler', 'relatorio:ler', 'financeiro:ler'],
+      permissoes: ['agenda:ler', 'agenda:editar', 'servico:ler', 'cliente:ler', 'chat:usar', 'funcionario:ler', 'relatorio:ler', 'financeiro:ler', 'empresa:editar'],
     });
     const menu = screen.getByRole('navigation', { name: 'Menu principal' });
     for (const item of itensEmpresa) expect(menu).toHaveTextContent(item.rotulo);

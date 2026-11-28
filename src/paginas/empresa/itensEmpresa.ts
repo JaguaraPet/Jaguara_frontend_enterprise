@@ -18,5 +18,6 @@ export const itensEmpresa: (ItemMenu & { descricao: string })[] = [
   { grupo: 'Gestão', rotulo: 'Pagamentos', caminho: '/pagamentos', permissao: 'financeiro:ler', descricao: 'Recebimentos e cobranças' },
   { grupo: 'Gestão', rotulo: 'Indicadores', caminho: '/indicadores', permissao: 'relatorio:ler', descricao: 'Atendimentos, faturamento e serviços mais pedidos' },
   { grupo: 'Gestão', rotulo: 'Relatórios', caminho: '/relatorios', permissao: 'relatorio:ler', descricao: 'Relatórios em tela e em PDF' },
+  { grupo: 'Conta', rotulo: 'Perfil da empresa', caminho: '/perfil-empresa', permissao: 'empresa:editar', descricao: 'O que o tutor vê no app e na sua página' },
   { grupo: 'Conta', rotulo: 'Privacidade', caminho: '/privacidade', descricao: 'Seus dados e consentimentos' },
 ];
