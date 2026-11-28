@@ -10,6 +10,12 @@ export const itensAdmin: (ItemMenu & { descricao: string })[] = [
     descricao: 'Logs críticos e de auditoria',
   },
   {
+    rotulo: 'Verificação de empresas',
+    caminho: '/admin/verificacoes',
+    permissao: 'admin:empresas',
+    descricao: 'CNPJ em análise e contestações',
+  },
+  {
     rotulo: 'Chamados de suporte',
     caminho: '/admin/chamados',
     permissao: 'admin:suporte',

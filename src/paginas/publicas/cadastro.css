@@ -1,20 +1,6 @@
-/* Cadastro da empresa (UC-32): o cartão do login, mais largo, com grupos de campos. */
+/* Cadastro da empresa (UC-32): o cartão do login, mais largo, em quatro etapas curtas. */
 .cadastro__cartao {
   max-width: 560px;
-}
-
-.cadastro__grupo {
-  display: grid;
-  gap: var(--espaco-md);
-  margin: 0;
-  padding: var(--espaco-md);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-padrao);
-}
-
-.cadastro__grupo legend {
-  font: var(--fonte-legenda);
-  font-weight: 600;
 }
 
 .cadastro__linha {
@@ -45,8 +31,160 @@
   margin-top: 4px;
 }
 
+/* Indicador das etapas: número no círculo e o nome embaixo */
+.cadastro__etapas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--espaco-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etapa;
+}
+
+.cadastro__etapas li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-xs);
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+/* A linha que liga uma etapa à seguinte */
+.cadastro__etapas li + li::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: calc(50% + 20px);
+  width: calc(100% - 40px);
+  height: 2px;
+  background: var(--cor-borda);
+}
+
+.cadastro__etapas li.cadastro__etapa--feita + li::before,
+.cadastro__etapas li.cadastro__etapa--atual::before {
+  background: var(--cor-secundaria);
+}
+
+.cadastro__etapa-numero {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--cor-borda);
+  background: var(--cor-fundo);
+  font-weight: 600;
+}
+
+.cadastro__etapa--atual {
+  color: var(--cor-texto);
+  font-weight: 600;
+}
+
+.cadastro__etapa--atual .cadastro__etapa-numero {
+  border-color: var(--cor-secundaria);
+  background: var(--cor-secundaria);
+  color: var(--cor-branco);
+}
+
+.cadastro__etapa--feita .cadastro__etapa-numero {
+  border-color: var(--cor-secundaria);
+  color: var(--cor-secundaria);
+}
+
+.cadastro__passo {
+  display: grid;
+  gap: var(--espaco-md);
+}
+
+.cadastro__titulo-etapa {
+  margin: 0;
+  font: var(--fonte-titulo-2);
+  font-size: 18px;
+}
+
+.cadastro__titulo-etapa:focus {
+  outline: none;
+}
+
+.cadastro__nota {
+  margin: 0;
+  font: var(--fonte-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.cadastro__acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espaco-sm);
+  margin-top: var(--espaco-sm);
+}
+
+.cadastro__acoes .botao {
+  min-width: 128px;
+}
+
+/* Revisão: o que foi preenchido, com "Alterar" em cada bloco */
+.cadastro__resumo {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-padrao);
+}
+
+.cadastro__resumo > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 2px var(--espaco-md);
+  padding: var(--espaco-md);
+}
+
+.cadastro__resumo > div + div {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.cadastro__resumo dt {
+  grid-column: 1;
+  font: var(--fonte-legenda);
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
+}
+
+.cadastro__resumo dd {
+  grid-column: 1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cadastro__resumo .botao {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
 @media (max-width: 480px) {
+  .entrar:has(.cadastro__cartao) {
+    padding: var(--espaco-sm);
+  }
+
+  .cadastro__cartao {
+    padding: var(--espaco-xl) var(--espaco-lg);
+  }
+
+  .cadastro__etapas li {
+    font-size: 12px;
+  }
+
   .cadastro__linha {
     grid-template-columns: 1fr;
+  }
+
+  .cadastro__acoes .botao {
+    flex: 1;
+    min-width: 0;
   }
 }
