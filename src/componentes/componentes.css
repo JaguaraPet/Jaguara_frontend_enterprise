@@ -72,9 +72,11 @@
 .campo__erro { font: var(--fonte-legenda); color: var(--cor-erro); margin: 0; }
 
 .cartao {
-  background: var(--cor-superficie);
-  border-radius: var(--raio-padrao);
-  padding: var(--espaco-lg);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgb(30 27 24 / 4%);
+  padding: var(--espaco-lg) var(--espaco-xl);
   display: flex;
   flex-direction: column;
   gap: var(--espaco-sm);
