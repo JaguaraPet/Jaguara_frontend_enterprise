@@ -63,8 +63,9 @@ function situacao(item: ItemAgenda): { rotulo: string; classe: string } {
       ? { rotulo: 'Atendido · a receber', classe: 'receber' }
       : { rotulo: 'Atendido', classe: 'feito' };
   }
-  return new Date(item.inicio) <= new Date()
-    ? { rotulo: 'Aguardando', classe: 'aguardando' }
+  if (new Date(item.inicio) <= new Date()) return { rotulo: 'Aguardando', classe: 'aguardando' };
+  return item.confirmado
+    ? { rotulo: 'Confirmado ✓', classe: 'confirmado' }
     : { rotulo: 'Agendado', classe: 'agendado' };
 }
 

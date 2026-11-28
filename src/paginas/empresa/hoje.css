@@ -244,6 +244,11 @@
   color: var(--cor-alerta);
 }
 
+.hoje-situacao--confirmado {
+  background: var(--cor-suave-sucesso);
+  color: var(--cor-secundaria);
+}
+
 .hoje-situacao--andamento {
   background: var(--cor-suave-info);
   color: var(--cor-secundaria);
