@@ -14,3 +14,23 @@
   outline: 2px solid var(--cor-primaria);
   outline-offset: 2px;
 }
+
+.clientes__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+}
+
+.importar__passos {
+  margin: 0 0 var(--espaco-md);
+  padding-left: 1.25rem;
+  display: grid;
+  gap: var(--espaco-sm);
+}
+
+.importar__declaracao {
+  display: flex;
+  gap: var(--espaco-sm);
+  align-items: flex-start;
+  margin: var(--espaco-md) 0;
+}

@@ -8,6 +8,7 @@ import { useUsuario } from '../../sessao/useUsuario';
 import '../admin/admin.css';
 import '../admin/logs.css';
 import './clientes.css';
+import { ImportarClientes } from './ImportarClientes';
 
 type Cliente = components['schemas']['Cliente'];
 type Especie = components['schemas']['Especie'];
@@ -49,6 +50,7 @@ export function Clientes() {
   const [versao, setVersao] = useState(0);
   const [novo, setNovo] = useState(false);
   const [termo, setTermo] = useState<File | null>(null);
+  const [importando, setImportando] = useState(false);
 
   useEffect(() => {
     if (!empresaId) return;
@@ -187,9 +189,17 @@ export function Clientes() {
           <h1>Clientes</h1>
           <p className="pagina__descricao">Tutores atendidos pela empresa, com e sem o app.</p>
         </div>
-        {podeEditar && !novo && <Botao onClick={() => setNovo(true)}>+ Novo cliente</Botao>}
+        {podeEditar && !novo && (
+          <div className="clientes__acoes">
+            <Botao variante="secundaria" onClick={() => setImportando((v) => !v)}>
+              {importando ? 'Fechar importação' : 'Importar planilha'}
+            </Botao>
+            <Botao onClick={() => setNovo(true)}>+ Novo cliente</Botao>
+          </div>
+        )}
       </div>
       {aviso && <Alerta tipo={aviso.tipo} titulo={aviso.titulo} mensagem={aviso.mensagem} />}
+      {importando && podeEditar && <ImportarClientes empresaId={empresaId} aoTerminar={() => setVersao((v) => v + 1)} />}
       {revogando && (
         <>
           <Alerta
