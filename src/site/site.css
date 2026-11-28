@@ -738,3 +738,10 @@
   font: var(--fonte-legenda);
   color: rgb(255 255 255 / 55%);
 }
+
+.site-vitrine__nota {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+  margin: var(--espaco-xs) 0 0;
+}

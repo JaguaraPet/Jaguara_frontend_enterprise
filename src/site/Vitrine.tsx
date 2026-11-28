@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { api } from '../api/cliente';
 import type { components } from '../api/esquema';
+import { Estrelas } from '../paginas/empresa/Avaliacoes';
+import '../paginas/empresa/avaliacoes.css';
 import { URL_APK, urlTutor } from './enderecos';
 
 type Vitrine = components['schemas']['VitrineEmpresa'];
@@ -85,6 +87,12 @@ export function Vitrine() {
             <p className="site-vitrine__local">
               {empresa.enderecoBairro}, {empresa.enderecoCidade} - {empresa.enderecoUf}
             </p>
+            {empresa.avaliacoes.media !== null && (
+              <p className="site-vitrine__nota">
+                <Estrelas nota={empresa.avaliacoes.media} /> {empresa.avaliacoes.media.toLocaleString('pt-BR')} ·{' '}
+                {empresa.avaliacoes.total} {empresa.avaliacoes.total === 1 ? 'avaliação' : 'avaliações'}
+              </p>
+            )}
           </div>
         </div>
       </header>
@@ -111,6 +119,30 @@ export function Vitrine() {
               </ul>
             )}
           </section>
+
+          {empresa.avaliacoes.recentes.length > 0 && (
+            <section aria-labelledby="titulo-avaliacoes">
+              <h2 id="titulo-avaliacoes">O que dizem os tutores</h2>
+              <ul className="avaliacoes__lista">
+                {empresa.avaliacoes.recentes.map((a) => (
+                  <li key={a.id} className="avaliacoes__item">
+                    <div className="avaliacoes__linha">
+                      <Estrelas nota={a.nota} />
+                      <span className="avaliacoes__meta">
+                        {a.autor} · {a.servico}
+                      </span>
+                    </div>
+                    <p>{a.comentario}</p>
+                    {a.resposta && (
+                      <p className="avaliacoes__resposta">
+                        <strong>Resposta da empresa:</strong> {a.resposta}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {empresa.politicaCancelamento && (
             <section aria-labelledby="titulo-cancelamento">
